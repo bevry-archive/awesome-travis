@@ -8,6 +8,7 @@ Crowd-sourced list of [Travis CI](https://travis-ci.org) hooks/scripts etc to le
 ### Slack
 
 ```
+# https://github.com/balupton/awesome-travis#slack
 travis encrypt --org "$SLACK_SUBDOMAIN:$SLACK_TRAVIS_TOKEN#updates" --add notifications.slack
 ```
 
@@ -17,6 +18,7 @@ Used by [bevry/base](https://github.com/bevry/base)
 ### Email
 
 ```
+# https://github.com/balupton/awesome-travis#email
 travis encrypt --org "$TRAVIS_NOTIFICATION_EMAIL" --add notifications.email.recipients
 ```
 
@@ -27,8 +29,10 @@ Used by [bevry/base](https://github.com/bevry/base)
 
 ### Version Matrix
 
+Complete configuration for the different [node.js versions](https://github.com/nodejs/LTS) one may need to support. With legacy versions allowed to fail.
+
 ``` yaml
-# https://github.com/nodejs/LTS
+# https://github.com/balupton/awesome-travis#version-matrix
 language: node_js
 node_js:
   - "0.8"   # end of life
@@ -54,7 +58,8 @@ Used by [bevry/base](https://github.com/bevry/base)
 
 ``` yaml
 install: |
-  # Ensure npm is up to date
+  # Ensure NPM is latest
+  # https://github.com/balupton/awesome-travis#ensure-npm-is-latest
   export CURRENT_NPM_VERSION="$(npm --version)"
   export LATEST_NPM_VERSION="$(npm view npm version)"
   if test "$CURRENT_NPM_VERSION" != "$LATEST_NPM_VERSION"; then
@@ -71,6 +76,7 @@ Used by [bevry/base](https://github.com/bevry/base)
 ``` yaml
 install: |
   # Ensure dependencies install with a LTS node version
+  # https://github.com/balupton/awesome-travis#use-lts-node-version-for-preparation
   export CURRENT_NODE_VERSION="$(node --version)"
   export LTS_NODE_VERSIONS="$(nvm ls-remote --lts)"
   if echo "$LTS_NODE_VERSIONS" | grep "$CURRENT_NODE_VERSION"; then
@@ -85,6 +91,7 @@ install: |
   fi
   
   # Ensure compilation and linting occur on a LTS node version
+  # https://github.com/balupton/awesome-travis#use-lts-node-version-for-preparation
   if test "$LTS_NODE_VERSION"; then
     echo "running on a non-LTS node version, compiling with LTS, skipping linting"
     nvm use "$LTS_NODE_VERSION"
@@ -106,8 +113,9 @@ Used by [bevry/base](https://github.com/bevry/base)
 Useful for when you have a content repository, which when updated, you want to rebuild the website/render repository.
 
 ``` yaml
-# Doesn't use --debug on `travis login` as that will output our github token
 after_success: |
+  # Rerun another project's tests
+  # https://github.com/balupton/awesome-travis#rerun-another-projects-tests
   if [ ! -z $GITHUB_TRAVIS_TOKEN ]; then
     echo "Pinging $DEPLOY_REPO_SLUG...";
     rvm install 2.1;
@@ -128,7 +136,7 @@ env:
     - DEPLOY_REPO_SLUG='bevry/staticsitegenerators-website'  # this is the repo owner and repo name that you want tested and deployed, set correctly
 ```
 
-This should be easier but https://github.com/travis-ci/travis.rb/issues/315 is a thing
+This should be easier but https://github.com/travis-ci/travis.rb/issues/315 is a thing. Also don't use --debug on `travis login` as that will output the github token.
 
 Used by [bevry/staticsitegenerators-list](https://github.com/bevry/staticsitegenerators-list)
 
@@ -141,6 +149,8 @@ If the tests ran on the branch that we deploy, then prepare git for a push and r
 ``` yaml
 # Deployment
 after_success: |
+  # Git + NPM Script Deployment
+  # https://github.com/balupton/awesome-travis#git--npm-script-deployment
   if ([ ! -z "$DEPLOY_TOKEN" ] &&
       [ "$TRAVIS_BRANCH" == "$DEPLOY_BRANCH" ] &&
       [ -z "$TRAVIS_TAG" ] &&
