@@ -7,26 +7,25 @@ Crowd-sourced list of [Travis CI](https://travis-ci.org) hooks/scripts etc to le
 
 ### Slack
 
-Used by [bevry/base](https://github.com/bevry/base)
-
 ```
 travis encrypt --org "$SLACK_SUBDOMAIN:$SLACK_TRAVIS_TOKEN#updates" --add notifications.slack
 ```
 
-### Email
-
 Used by [bevry/base](https://github.com/bevry/base)
+
+
+### Email
 
 ```
 travis encrypt --org "$TRAVIS_NOTIFICATION_EMAIL" --add notifications.email.recipients
 ```
 
+Used by [bevry/base](https://github.com/bevry/base)
+
 
 ## Node.js
 
 ### Version Matrix
-
-Used by [bevry/base](https://github.com/bevry/base)
 
 ``` yaml
 # https://github.com/nodejs/LTS
@@ -48,9 +47,10 @@ cache:
     - node_modules
 ```
 
-### Ensure NPM is latest
-
 Used by [bevry/base](https://github.com/bevry/base)
+
+
+### Ensure NPM is latest
 
 ``` yaml
 install: |
@@ -63,9 +63,10 @@ install: |
   fi
 ```
 
-### Use LTS node version for preparation
-
 Used by [bevry/base](https://github.com/bevry/base)
+
+
+### Use LTS node version for preparation
 
 ``` yaml
 install: |
@@ -95,14 +96,14 @@ install: |
   fi
 ```
 
+Used by [bevry/base](https://github.com/bevry/base)
+
 
 ## Deployment
 
 ### Rerun another project's tests
 
 Useful for when you have a content repository, which when updated, you want to rebuild the website/render repository.
-
-Used by [bevry/staticsitegenerators-list](https://github.com/bevry/staticsitegenerators-list)
 
 ``` yaml
 # Doesn't use --debug on `travis login` as that will output our github token
@@ -129,12 +130,12 @@ env:
 
 This should be easier but https://github.com/travis-ci/travis.rb/issues/315 is a thing
 
+Used by [bevry/staticsitegenerators-list](https://github.com/bevry/staticsitegenerators-list)
+
 
 ### NPM Script Deployment
 
 Runs the `our:deploy` npm script after a successful test.
-
-Used by [bevry/staticsitegenerators-website](https://github.com/bevry/staticsitegenerators-website)
 
 ``` yaml
 # Deployment
@@ -164,6 +165,8 @@ env:
     - DEPLOY_NAME='Travis CI Deployer'  # this is the name that is used for the deployment commit, set to whatever
     - DEPLOY_EMAIL='deployer@travis-ci.org'  # this is the email that is used for the deployment commit, set to whatever
 ```
+
+Used by [bevry/staticsitegenerators-website](https://github.com/bevry/staticsitegenerators-website)
 
 
 ## Contribution
