@@ -63,7 +63,7 @@ install: |
   fi
 ```
 
-### Use LTS node version for preperation
+### Use LTS node version for preparation
 
 Used by [bevry/base](https://github.com/bevry/base)
 
