@@ -130,7 +130,7 @@ env:
 This should be easier but https://github.com/travis-ci/travis.rb/issues/315 is a thing
 
 
-### Deployment
+### NPM Script Deployment
 
 Runs the `our:deploy` npm script after a successful test.
 
@@ -171,6 +171,10 @@ env:
 Add headings to the appropriate sections or make a new section with your Travis CI nifties.
 
 Use a part? feel free to add yourself to the `Used by` lists.
+
+To keep the spirit of collaboration going, anyone who gets a pull request merged will get commit access.
+
+Avoid changing header titles, as people may reference them when they use parts.
 
 
 ## License
