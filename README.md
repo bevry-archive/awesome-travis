@@ -117,22 +117,24 @@ Used by [bevry/base](https://github.com/bevry/base)
 
 ### Rerun another project's tests
 
-Useful for when you have a content repository, which when updated, you want to rebuild the website/render repository.
+Useful for when you have a content repository that is used by a different repository, and as such, when the content repository changes, you want to rerun the tests for the other repository, perhaps even for deployment purposes.
+
+Create your `GITHUB_TRAVIS_TOKEN` by creating a [GitHub Personal Access Token](https://help.github.com/articles/creating-an-access-token-for-command-line-use/) with the `repo` permission.
 
 ``` yaml
 after_success: |
   # Rerun another project's tests
   # https://github.com/balupton/awesome-travis#rerun-another-projects-tests
   if [ ! -z $GITHUB_TRAVIS_TOKEN ]; then
-    echo "Pinging $DEPLOY_REPO_SLUG...";
-    rvm install 2.1;
-    gem install travis curb --no-rdoc --no-ri;
-    travis login --skip-completion-check --org --github-token "$GITHUB_TRAVIS_TOKEN";
-    export TRAVIS_ACCESS_TOKEN=`cat ~/.travis/config.yml | grep access_token | sed 's/ *access_token: *//'`;
-    travis restart --debug --skip-completion-check --org -r "$DEPLOY_REPO_SLUG" -t "$TRAVIS_ACCESS_TOKEN";
-    echo "Pinged $DEPLOY_REPO_SLUG";
+    echo "pinging $OTHER_REPO_SLUG..."
+    rvm install 2.1
+    gem install travis curb --no-rdoc --no-ri
+    travis login --skip-completion-check --org --github-token "$GITHUB_TRAVIS_TOKEN"
+    export TRAVIS_ACCESS_TOKEN=`cat ~/.travis/config.yml | grep access_token | sed 's/ *access_token: *//'`
+    travis restart --debug --skip-completion-check --org -r "$OTHER_REPO_SLUG" -t "$TRAVIS_ACCESS_TOKEN"
+    echo "pinged $OTHER_REPO_SLUG"
   else
-    echo "Skipped ping $DEPLOY_REPO_SLUG";
+    echo "skipped ping $OTHER_REPO_SLUG"
   fi
 
 # Custom Configuration
@@ -140,7 +142,7 @@ env:
   global:
     # Deployment Environment Variables
     # travis encrypt "GITHUB_TRAVIS_TOKEN=$GITHUB_TRAVIS_TOKEN" --add env.global
-    - DEPLOY_REPO_SLUG='bevry/staticsitegenerators-website'  # this is the repo owner and repo name that you want tested and deployed, set correctly
+    - OTHER_REPO_SLUG='bevry/staticsitegenerators-website'
 ```
 
 This should be easier but https://github.com/travis-ci/travis.rb/issues/315 is a thing. Also don't use --debug on `travis login` as that will output the github token.
@@ -152,7 +154,7 @@ Used by [bevry/staticsitegenerators-list](https://github.com/bevry/staticsitegen
 
 If the tests succeeded on the branch that we deploy, then prepare git for a push and runs the custom [npm script](https://docs.npmjs.com/misc/scripts) `our:deploy` after a successful test. The `our:deploy` script should be something that generates your website and runs a `git push origin`. Useful for [GitHub Pages](https://pages.github.com) deployments.
 
-Create your `DEPLOY_TOKEN` by creating a [GitHub Personal Access Token](https://help.github.com/articles/creating-an-access-token-for-command-line-use/) with the `repo` permission.
+Create your `GITHUB_TRAVIS_TOKEN` by creating a [GitHub Personal Access Token](https://help.github.com/articles/creating-an-access-token-for-command-line-use/) with the `repo` permission.
 
 ``` yaml
 # Deployment
@@ -163,15 +165,15 @@ after_success: |
       [ "$TRAVIS_BRANCH" == "$DEPLOY_BRANCH" ] &&
       [ -z "$TRAVIS_TAG" ] &&
       [ "$TRAVIS_PULL_REQUEST" == "false" ]); then
-    echo "Deploying";
-    git config --global user.email "$DEPLOY_EMAIL";
-    git config --global user.name "$DEPLOY_NAME";
-    git remote rm origin;
-    git remote add origin "https://$DEPLOY_USER:$DEPLOY_TOKEN@github.com/$TRAVIS_REPO_SLUG.git";
-    npm run our:deploy;
-    echo "Deployed";
+    echo "deploying..."
+    git config --global user.email "$DEPLOY_EMAIL"
+    git config --global user.name "$DEPLOY_NAME"
+    git remote rm origin
+    git remote add origin "https://$DEPLOY_USER:$DEPLOY_TOKEN@github.com/$TRAVIS_REPO_SLUG.git"
+    npm run our:deploy
+    echo "...deployed"
   else
-    echo "Skipped deploy"
+    echo "skipped deploy"
   fi
  
 # Custom Configuration
