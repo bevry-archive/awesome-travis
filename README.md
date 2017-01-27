@@ -9,7 +9,7 @@ Crowd-sourced list of [Travis CI](https://travis-ci.org) hooks/scripts etc to le
 
 Used by [bevry/base](https://github.com/bevry/base)
 
-``` bash
+```
 travis encrypt --org "$SLACK_SUBDOMAIN:$SLACK_TRAVIS_TOKEN#updates" --add notifications.slack
 ```
 
@@ -17,7 +17,7 @@ travis encrypt --org "$SLACK_SUBDOMAIN:$SLACK_TRAVIS_TOKEN#updates" --add notifi
 
 Used by [bevry/base](https://github.com/bevry/base)
 
-``` bash
+```
 travis encrypt --org "$TRAVIS_NOTIFICATION_EMAIL" --add notifications.email.recipients
 ```
 
