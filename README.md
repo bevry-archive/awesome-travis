@@ -197,6 +197,7 @@ Fetch your `SURGE_TOKEN` via the `surge token` command.
 ``` yaml
 after_success: |
   # Release to Surge
+  # https://github.com/balupton/awesome-travis#release-to-surge
   # travis encrypt "SURGE_LOGIN=$SURGE_LOGIN" --add env.global
   # travis encrypt "SURGE_TOKEN=$SURGE_TOKEN" --add env.global
   export CURRENT_NODE_VERSION="$(node --version)"
@@ -237,6 +238,7 @@ If the tests succeeded and travis is running on a tag and on the latest node.js 
 ``` yaml
 after_success: |
   # Release to NPM
+  # https://github.com/balupton/awesome-travis#release-to-npm
   # travis encrypt "NPM_USERNAME=$NPM_USERNAME" --add env.global
   # travis encrypt "NPM_PASSWORD=$NPM_PASSWORD" --add env.global
   # travis encrypt "NPM_EMAIL=$NPM_EMAIL" --add env.global
