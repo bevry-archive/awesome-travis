@@ -64,8 +64,9 @@ install: |
   export CURRENT_NPM_VERSION="$(npm --version)"
   export LATEST_NPM_VERSION="$(npm view npm version)"
   if test "$CURRENT_NPM_VERSION" != "$LATEST_NPM_VERSION"; then
-    echo "running an old npm version, upgrading"
+    echo "running an old npm version, upgrading npm..."
     npm instal npm --global --cache-min=Infinity
+    echo "...npm upgrade complete
   fi
 ```
 
@@ -81,27 +82,31 @@ install: |
   export CURRENT_NODE_VERSION="$(node --version)"
   export LTS_NODE_VERSIONS="$(nvm ls-remote --lts)"
   if echo "$LTS_NODE_VERSIONS" | grep "$CURRENT_NODE_VERSION"; then
-    echo "running on a LTS node version, completing setup"
+    echo "running on a LTS node version, completing setup..."
     npm run our:setup
+    echo "...setup complete with current LTS version"
   else
-    echo "running on a non-LTS node version, completing setup on a LTS node version"
+    echo "running on a non-LTS node version, completing setup on a LTS node version..."
     nvm install --lts
-    export LTS_NODE_VERSION="$(node --version)"
+    export LTS_NODE_INSTALLED_VERSION="$(node --version)"
     npm run our:setup
     nvm use "$TRAVIS_NODE_VERSION"
+    echo "...setup complete with LTS"
   fi
 
 before_script: |
   # Ensure compilation and linting occur on a LTS node version
   # https://github.com/balupton/awesome-travis#use-lts-node-version-for-preparation
-  if test "$LTS_NODE_VERSION"; then
-    echo "running on a non-LTS node version, compiling with LTS, skipping linting"
-    nvm use "$LTS_NODE_VERSION"
+  if test "$LTS_NODE_INSTALLED_VERSION"; then
+    echo "running on a non-LTS node version, compiling with LTS, skipping linting..."
+    nvm use "$LTS_NODE_INSTALLED_VERSION"
     npm run our:compile
     nvm use "$TRAVIS_NODE_VERSION"
+    echo "...compiled"
   else
-    echo "running on a LTS node version, compiling and linting"
+    echo "running on a LTS node version, compiling and linting..."
     npm run our:compile && npm run our:verify
+    echo "...compiled and linted"
   fi
 ```
 
@@ -145,8 +150,9 @@ Used by [bevry/staticsitegenerators-list](https://github.com/bevry/staticsitegen
 
 ### Git + NPM Script Deployment
 
-If the tests ran on the branch that we deploy, then prepare git for a push and runs the custom [npm script](https://docs.npmjs.com/misc/scripts) `our:deploy` after a successful test. The `our:deploy` script should be something that generates your website and runs a `git push origin`. Useful for [GitHub Pages](https://pages.github.com) deployments.
+If the tests succeeded on the branch that we deploy, then prepare git for a push and runs the custom [npm script](https://docs.npmjs.com/misc/scripts) `our:deploy` after a successful test. The `our:deploy` script should be something that generates your website and runs a `git push origin`. Useful for [GitHub Pages](https://pages.github.com) deployments.
 
+Create your `DEPLOY_TOKEN` by creating a [GitHub Personal Access Token](https://help.github.com/articles/creating-an-access-token-for-command-line-use/) with the `repo` permission.
 
 ``` yaml
 # Deployment
@@ -180,6 +186,78 @@ env:
 ```
 
 Used by [bevry/staticsitegenerators-website](https://github.com/bevry/staticsitegenerators-website)
+
+
+### Release to Surge
+
+If the tests succeeded, then deploy our release to [Surge](https://surge.sh) URLs for our branch, tag, and commit. Useful for rendering documentation and compiling code then deploying the release, such that you don't need the rendered documentation and compiled code inside your source repository. This is beneficial because sometimes documentation will reference the current commit, causing a documentation recompile to always leave a dirty state - this solution avoids that, as documentation can be git ignored.
+
+Fetch your `SURGE_TOKEN` via the `surge token` command.
+
+``` yaml
+after_success: |
+  # Release to Surge
+  # travis encrypt "SURGE_LOGIN=$SURGE_LOGIN" --add env.global
+  # travis encrypt "SURGE_TOKEN=$SURGE_TOKEN" --add env.global
+  export CURRENT_NODE_VERSION="$(node --version)"
+  export LTS_NODE_LATEST_VERSION="$(nvm version-remote --lts)"
+  if test "$CURRENT_NODE_VERSION" = "$LTS_NODE_LATEST_VERSION"; then
+    echo "running on latest LTS node version, performing release to surge..."
+    echo "preparing release"
+    npm run our:meta
+    echo "installing surge"
+    npm install surge
+    echo "performing deploy"
+    export SURGE_SLUG="$(echo $TRAVIS_REPO_SLUG | sed 's/^\(.*\)\/\(.*\)/\2.\1/')"
+    if test "$TRAVIS_BRANCH"; then
+      echo "deploying branch..."
+      surge --project . --domain "$TRAVIS_BRANCH.$SURGE_SLUG.surge.sh"
+    fi
+    if test "$TRAVIS_TAG"; then
+      echo "deploying tag..."
+      surge --project . --domain "$TRAVIS_TAG.$SURGE_SLUG.surge.sh"
+    fi
+    if test "$TRAVIS_COMMIT"; then
+      echo "deploying commit..."
+      surge --project . --domain "$TRAVIS_COMMIT.$SURGE_SLUG.surge.sh"
+    fi
+    echo "...released to surge"
+  else
+    echo "running on non-latest LTS node version, skipping release to surge"
+  fi
+```
+
+Used by [bevry/base](https://github.com/bevry/base) with example at [bevry/badges](https://github.com/bevry/badges)
+
+
+### Release to NPM
+
+If the tests succeeded and travis is running on a tag and on the latest node.js LTS version, then perform an `npm publish`. Useful such that git tags can be published to npm, allowing any contributor to git able to do npm releases. When combined with other npm scripts, this can help automate a lot.
+
+``` yaml
+after_success: |
+  # Release to NPM
+  # travis encrypt "NPM_USERNAME=$NPM_USERNAME" --add env.global
+  # travis encrypt "NPM_PASSWORD=$NPM_PASSWORD" --add env.global
+  # travis encrypt "NPM_EMAIL=$NPM_EMAIL" --add env.global
+  export CURRENT_NODE_VERSION="$(node --version)"
+  export LTS_NODE_LATEST_VERSION="$(nvm version-remote --lts)"
+  if test "$CURRENT_NODE_VERSION" = "$LTS_NODE_LATEST_VERSION"; then
+    if test "$TRAVIS_TAG"; then
+      echo "logging in..."
+      echo -e "$NPM_USERNAME\n$NPM_PASSWORD\n$NPM_EMAIL" | npm login
+      echo "publishing..."
+      npm publish
+      echo "...released to npm"
+    else
+      echo "non-tag, no need for release"
+    fi
+  else
+    echo "running on non-latest LTS node version, skipping release to npm"
+  fi
+```
+
+Used by [bevry/base](https://github.com/bevry/base) with example at [bevry/badges](https://github.com/bevry/badges)
 
 
 ## Contribution
