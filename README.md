@@ -119,7 +119,7 @@ after_success: |
     echo "Skipped ping $DEPLOY_REPO_SLUG";
   fi
 
-# Custom Environment Variables
+# Custom Configuration
 env:
   global:
     # Deployment Environment Variables
