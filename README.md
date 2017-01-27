@@ -27,12 +27,13 @@ Used by [bevry/base](https://github.com/bevry/base)
 
 ## Node.js
 
-### Version Matrix
+### Complete Node.js Version Matrix
 
 Complete configuration for the different [node.js versions](https://github.com/nodejs/LTS) one may need to support. With legacy versions allowed to fail.
 
 ``` yaml
-# https://github.com/balupton/awesome-travis#version-matrix
+# Complete Node.js Version Matrix
+# https://github.com/balupton/awesome-travis#complete-nodejs-version-matrix
 language: node_js
 node_js:
   - "0.8"   # end of life
