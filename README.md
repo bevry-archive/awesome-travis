@@ -9,7 +9,7 @@ Crowd-sourced list of [Travis CI](https://travis-ci.org) hooks/scripts etc to le
 
 Used by [bevry/base](https://github.com/bevry/base)
 
-```
+``` bash
 travis encrypt --org "$SLACK_SUBDOMAIN:$SLACK_TRAVIS_TOKEN#updates" --add notifications.slack
 ```
 
@@ -17,7 +17,7 @@ travis encrypt --org "$SLACK_SUBDOMAIN:$SLACK_TRAVIS_TOKEN#updates" --add notifi
 
 Used by [bevry/base](https://github.com/bevry/base)
 
-```
+``` bash
 travis encrypt --org "$TRAVIS_NOTIFICATION_EMAIL" --add notifications.email.recipients
 ```
 
@@ -28,7 +28,7 @@ travis encrypt --org "$TRAVIS_NOTIFICATION_EMAIL" --add notifications.email.reci
 
 Used by [bevry/base](https://github.com/bevry/base)
 
-```
+``` yaml
 # https://github.com/nodejs/LTS
 language: node_js
 node_js:
@@ -52,7 +52,7 @@ cache:
 
 Used by [bevry/base](https://github.com/bevry/base)
 
-```
+``` yaml
 install: |
   # Ensure npm is up to date
   export CURRENT_NPM_VERSION="$(npm --version)"
@@ -67,7 +67,7 @@ install: |
 
 Used by [bevry/base](https://github.com/bevry/base)
 
-```
+``` yaml
 install: |
   # Ensure dependencies install with a LTS node version
   export CURRENT_NODE_VERSION="$(node --version)"
@@ -104,7 +104,7 @@ Useful for when you have a content repository, which when updated, you want to r
 
 Used by [staticsitegenerators-list](https://github.com/bevry/staticsitegenerators-list)
 
-```
+``` yaml
 # Doesn't use --debug on `travis login` as that will output our github token
 after_success: |
   if [ ! -z $GITHUB_TRAVIS_TOKEN ]; then
@@ -119,10 +119,11 @@ after_success: |
     echo "Skipped ping $DEPLOY_REPO_SLUG";
   fi
 
-# Custom deployment variables
-# travis encrypt "GITHUB_TRAVIS_TOKEN=$GITHUB_TRAVIS_TOKEN" --add env.global
+# Custom Environment Variables
 env:
   global:
+    # Deployment Environment Variables
+    # travis encrypt "GITHUB_TRAVIS_TOKEN=$GITHUB_TRAVIS_TOKEN" --add env.global
     - DEPLOY_REPO_SLUG='bevry/staticsitegenerators-website'  # this is the repo owner and repo name that you want tested and deployed, set correctly
 ```
 
@@ -135,7 +136,7 @@ Runs the `deploy` npm script after a successful test.
 
 Used by [staticsitegenerators-website](https://github.com/bevry/staticsitegenerators-website)
 
-```
+``` yaml
 # Deployment
 after_success: |
   if ([ ! -z "$DEPLOY_TOKEN" ] &&
