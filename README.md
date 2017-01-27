@@ -133,9 +133,10 @@ This should be easier but https://github.com/travis-ci/travis.rb/issues/315 is a
 Used by [bevry/staticsitegenerators-list](https://github.com/bevry/staticsitegenerators-list)
 
 
-### NPM Script Deployment
+### Git + NPM Script Deployment
 
-Runs the `our:deploy` npm script after a successful test.
+If the tests ran on the branch that we deploy, then prepare git for a push and runs the custom [npm script](https://docs.npmjs.com/misc/scripts) `our:deploy` after a successful test. The `our:deploy` script should be something that generates your website and runs a `git push origin`.
+
 
 ``` yaml
 # Deployment
