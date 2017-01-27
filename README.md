@@ -132,7 +132,7 @@ This should be easier but https://github.com/travis-ci/travis.rb/issues/315 is a
 
 ### Deployment
 
-Runs the `deploy` npm script after a successful test.
+Runs the `our:deploy` npm script after a successful test.
 
 Used by [bevry/staticsitegenerators-website](https://github.com/bevry/staticsitegenerators-website)
 
@@ -148,7 +148,7 @@ after_success: |
     git config --global user.name "$DEPLOY_NAME";
     git remote rm origin;
     git remote add origin "https://$DEPLOY_USER:$DEPLOY_TOKEN@github.com/$TRAVIS_REPO_SLUG.git";
-    npm run-script deploy;
+    npm run our:deploy;
     echo "Deployed";
   else
     echo "Skipped deploy"
