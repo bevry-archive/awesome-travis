@@ -135,7 +135,7 @@ Used by [bevry/staticsitegenerators-list](https://github.com/bevry/staticsitegen
 
 ### Git + NPM Script Deployment
 
-If the tests ran on the branch that we deploy, then prepare git for a push and runs the custom [npm script](https://docs.npmjs.com/misc/scripts) `our:deploy` after a successful test. The `our:deploy` script should be something that generates your website and runs a `git push origin`.
+If the tests ran on the branch that we deploy, then prepare git for a push and runs the custom [npm script](https://docs.npmjs.com/misc/scripts) `our:deploy` after a successful test. The `our:deploy` script should be something that generates your website and runs a `git push origin`. Useful for [GitHub Pages](https://pages.github.com) deployments.
 
 
 ``` yaml
