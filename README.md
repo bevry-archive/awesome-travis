@@ -90,7 +90,8 @@ install: |
     npm run our:setup
     nvm use "$TRAVIS_NODE_VERSION"
   fi
-  
+
+before_script: |
   # Ensure compilation and linting occur on a LTS node version
   # https://github.com/balupton/awesome-travis#use-lts-node-version-for-preparation
   if test "$LTS_NODE_VERSION"; then
