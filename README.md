@@ -102,7 +102,7 @@ install: |
 
 Useful for when you have a content repository, which when updated, you want to rebuild the website/render repository.
 
-Used by [staticsitegenerators-list](https://github.com/bevry/staticsitegenerators-list)
+Used by [bevry/staticsitegenerators-list](https://github.com/bevry/staticsitegenerators-list)
 
 ``` yaml
 # Doesn't use --debug on `travis login` as that will output our github token
@@ -134,7 +134,7 @@ This should be easier but https://github.com/travis-ci/travis.rb/issues/315 is a
 
 Runs the `deploy` npm script after a successful test.
 
-Used by [staticsitegenerators-website](https://github.com/bevry/staticsitegenerators-website)
+Used by [bevry/staticsitegenerators-website](https://github.com/bevry/staticsitegenerators-website)
 
 ``` yaml
 # Deployment
