@@ -137,10 +137,13 @@ after_success: |
     echo "skipped ping $OTHER_REPO_SLUG"
   fi
 
+
+# ========================================
 # Custom Configuration
+
 env:
   global:
-    # Deployment Environment Variables
+    # https://github.com/balupton/awesome-travis#rerun-another-projects-tests
     # travis encrypt "GITHUB_TRAVIS_TOKEN=$GITHUB_TRAVIS_TOKEN" --add env.global
     - OTHER_REPO_SLUG='bevry/staticsitegenerators-website'
 ```
@@ -175,11 +178,14 @@ after_success: |
   else
     echo "skipped deploy"
   fi
- 
+
+
+# ========================================
 # Custom Configuration
+
 env:
   global:
-    # Deployment Environment Variables
+    # https://github.com/balupton/awesome-travis#git--npm-script-deployment
     # travis encrypt "DEPLOY_USER=$GITHUB_USERNAME" --add env.global
     # travis encrypt "DEPLOY_TOKEN=$GITHUB_TRAVIS_TOKEN" --add env.global
     - DEPLOY_BRANCH='master'  # this is the branch name that you want tested and deployed, set correctly
@@ -200,8 +206,6 @@ Fetch your `SURGE_TOKEN` via the `surge token` command.
 after_success: |
   # Release to Surge
   # https://github.com/balupton/awesome-travis#release-to-surge
-  # travis encrypt "SURGE_LOGIN=$SURGE_LOGIN" --add env.global
-  # travis encrypt "SURGE_TOKEN=$SURGE_TOKEN" --add env.global
   export CURRENT_NODE_VERSION="$(node --version)"
   export LTS_NODE_LATEST_VERSION="$(nvm version-remote --lts)"
   if test "$CURRENT_NODE_VERSION" = "$LTS_NODE_LATEST_VERSION"; then
@@ -228,6 +232,16 @@ after_success: |
   else
     echo "running on non-latest LTS node version, skipping release to surge"
   fi
+
+
+# ========================================
+# Custom Configuration
+
+env:
+  global:
+  # https://github.com/balupton/awesome-travis#release-to-surge
+  # travis encrypt "SURGE_LOGIN=$SURGE_LOGIN" --add env.global
+  # travis encrypt "SURGE_TOKEN=$SURGE_TOKEN" --add env.global
 ```
 
 Used by [bevry/base](https://github.com/bevry/base) with example at [bevry/badges](https://github.com/bevry/badges)
@@ -259,6 +273,17 @@ after_success: |
   else
     echo "running on non-latest LTS node version, skipping release to npm"
   fi
+
+
+# ========================================
+# Custom Configuration
+
+env:
+  global:
+  # https://github.com/balupton/awesome-travis#release-to-npm
+  # travis encrypt "NPM_USERNAME=$NPM_USERNAME" --add env.global
+  # travis encrypt "NPM_PASSWORD=$NPM_PASSWORD" --add env.global
+  # travis encrypt "NPM_EMAIL=$NPM_EMAIL" --add env.global
 ```
 
 Used by [bevry/base](https://github.com/bevry/base) with example at [bevry/badges](https://github.com/bevry/badges)
