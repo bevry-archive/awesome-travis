@@ -61,11 +61,11 @@ Used by [bevry/base](https://github.com/bevry/base)
 install: |
   # Ensure NPM is latest
   # https://github.com/balupton/awesome-travis#ensure-npm-is-latest
-  export CURRENT_NPM_VERSION="$(npm --version)"
-  export LATEST_NPM_VERSION="$(npm view npm version)"
+  export CURRENT_NPM_VERSION="$(npm --version)" || exit -1
+  export LATEST_NPM_VERSION="$(npm view npm version)" || exit -1
   if test "$CURRENT_NPM_VERSION" != "$LATEST_NPM_VERSION"; then
-    echo "running an old npm version, upgrading npm..."
-    npm install npm --global --cache-min=Infinity
+    echo "running an old npm version $CURRENT_NPM_VERSION, upgrading npm to $LATEST_NPM_VERSION..."
+    npm install npm --global --cache-min=Infinity || exit -1
     echo "...npm upgrade complete"
   fi
 ```
@@ -79,18 +79,18 @@ Used by [bevry/base](https://github.com/bevry/base)
 install: |
   # Ensure dependencies install with a LTS node version
   # https://github.com/balupton/awesome-travis#use-lts-node-version-for-preparation
-  export CURRENT_NODE_VERSION="$(node --version)"
-  export LTS_NODE_VERSIONS="$(nvm ls-remote --lts)"
+  export CURRENT_NODE_VERSION="$(node --version)" || exit -1
+  export LTS_NODE_VERSIONS="$(nvm ls-remote --lts)" || exit -1
   if echo "$LTS_NODE_VERSIONS" | grep "$CURRENT_NODE_VERSION"; then
     echo "running on a LTS node version, completing setup..."
-    npm run our:setup
+    npm run our:setup || exit -1
     echo "...setup complete with current LTS version"
   else
     echo "running on a non-LTS node version, completing setup on a LTS node version..."
     nvm install --lts
-    export LTS_NODE_INSTALLED_VERSION="$(node --version)"
-    npm run our:setup
-    nvm use "$TRAVIS_NODE_VERSION"
+    export LTS_NODE_INSTALLED_VERSION="$(node --version)" || exit -1
+    npm run our:setup || exit -1
+    nvm use "$TRAVIS_NODE_VERSION" || exit -1
     echo "...setup complete with LTS"
   fi
 
@@ -99,13 +99,13 @@ before_script: |
   # https://github.com/balupton/awesome-travis#use-lts-node-version-for-preparation
   if test "$LTS_NODE_INSTALLED_VERSION"; then
     echo "running on a non-LTS node version, compiling with LTS, skipping linting..."
-    nvm use "$LTS_NODE_INSTALLED_VERSION"
-    npm run our:compile
-    nvm use "$TRAVIS_NODE_VERSION"
+    nvm use "$LTS_NODE_INSTALLED_VERSION" || exit -1
+    npm run our:compile || exit -1
+    nvm use "$TRAVIS_NODE_VERSION" || exit -1
     echo "...compiled"
   else
     echo "running on a LTS node version, compiling and linting..."
-    npm run our:compile && npm run our:verify
+    npm run our:compile && npm run our:verify || exit -1
     echo "...compiled and linted"
   fi
 ```
@@ -127,11 +127,11 @@ after_success: |
   # https://github.com/balupton/awesome-travis#rerun-another-projects-tests
   if [ ! -z $GITHUB_TRAVIS_TOKEN ]; then
     echo "pinging $OTHER_REPO_SLUG..."
-    rvm install 2.1
-    gem install travis curb --no-rdoc --no-ri
-    travis login --skip-completion-check --org --github-token "$GITHUB_TRAVIS_TOKEN"
-    export TRAVIS_ACCESS_TOKEN=`cat ~/.travis/config.yml | grep access_token | sed 's/ *access_token: *//'`
-    travis restart --debug --skip-completion-check --org -r "$OTHER_REPO_SLUG" -t "$TRAVIS_ACCESS_TOKEN"
+    rvm install 2.1 || exit -1
+    gem install travis curb --no-rdoc --no-ri || exit -1
+    travis login --skip-completion-check --org --github-token "$GITHUB_TRAVIS_TOKEN" || exit -1
+    export TRAVIS_ACCESS_TOKEN=`cat ~/.travis/config.yml | grep access_token | sed 's/ *access_token: *//'` || exit -1
+    travis restart --debug --skip-completion-check --org -r "$OTHER_REPO_SLUG" -t "$TRAVIS_ACCESS_TOKEN" || exit -1
     echo "pinged $OTHER_REPO_SLUG"
   else
     echo "skipped ping $OTHER_REPO_SLUG"
@@ -169,11 +169,11 @@ after_success: |
       [ -z "$TRAVIS_TAG" ] &&
       [ "$TRAVIS_PULL_REQUEST" == "false" ]); then
     echo "deploying..."
-    git config --global user.email "$DEPLOY_EMAIL"
-    git config --global user.name "$DEPLOY_NAME"
-    git remote rm origin
-    git remote add origin "https://$DEPLOY_USER:$DEPLOY_TOKEN@github.com/$TRAVIS_REPO_SLUG.git"
-    npm run our:deploy
+    git config --global user.email "$DEPLOY_EMAIL" || exit -1
+    git config --global user.name "$DEPLOY_NAME" || exit -1
+    git remote rm origin || exit -1
+    git remote add origin "https://$DEPLOY_USER:$DEPLOY_TOKEN@github.com/$TRAVIS_REPO_SLUG.git" || exit -1
+    npm run our:deploy || exit -1
     echo "...deployed"
   else
     echo "skipped deploy"
@@ -206,27 +206,27 @@ Fetch your `SURGE_TOKEN` via the `surge token` command.
 after_success: |
   # Release to Surge
   # https://github.com/balupton/awesome-travis#release-to-surge
-  export CURRENT_NODE_VERSION="$(node --version)"
-  export LTS_NODE_LATEST_VERSION="$(nvm version-remote --lts)"
+  export CURRENT_NODE_VERSION="$(node --version)" || exit -1
+  export LTS_NODE_LATEST_VERSION="$(nvm version-remote --lts)" || exit -1
   if test "$CURRENT_NODE_VERSION" = "$LTS_NODE_LATEST_VERSION"; then
     echo "running on latest LTS node version, performing release to surge..."
     echo "preparing release"
-    npm run our:meta
+    npm run our:meta || exit -1
     echo "installing surge"
-    npm install surge
+    npm install surge || exit -1
     echo "performing deploy"
-    export SURGE_SLUG="$(echo $TRAVIS_REPO_SLUG | sed 's/^\(.*\)\/\(.*\)/\2.\1/')"
+    export SURGE_SLUG="$(echo $TRAVIS_REPO_SLUG | sed 's/^\(.*\)\/\(.*\)/\2.\1/')" || exit -1
     if test "$TRAVIS_BRANCH"; then
       echo "deploying branch..."
-      surge --project . --domain "$TRAVIS_BRANCH.$SURGE_SLUG.surge.sh"
+      surge --project . --domain "$TRAVIS_BRANCH.$SURGE_SLUG.surge.sh" || exit -1
     fi
     if test "$TRAVIS_TAG"; then
       echo "deploying tag..."
-      surge --project . --domain "$TRAVIS_TAG.$SURGE_SLUG.surge.sh"
+      surge --project . --domain "$TRAVIS_TAG.$SURGE_SLUG.surge.sh" || exit -1
     fi
     if test "$TRAVIS_COMMIT"; then
       echo "deploying commit..."
-      surge --project . --domain "$TRAVIS_COMMIT.$SURGE_SLUG.surge.sh"
+      surge --project . --domain "$TRAVIS_COMMIT.$SURGE_SLUG.surge.sh" || exit -1
     fi
     echo "...released to surge"
   else
@@ -255,17 +255,14 @@ If the tests succeeded and travis is running on a tag and on the latest node.js 
 after_success: |
   # Release to NPM
   # https://github.com/balupton/awesome-travis#release-to-npm
-  # travis encrypt "NPM_USERNAME=$NPM_USERNAME" --add env.global
-  # travis encrypt "NPM_PASSWORD=$NPM_PASSWORD" --add env.global
-  # travis encrypt "NPM_EMAIL=$NPM_EMAIL" --add env.global
-  export CURRENT_NODE_VERSION="$(node --version)"
-  export LTS_NODE_LATEST_VERSION="$(nvm version-remote --lts)"
+  export CURRENT_NODE_VERSION="$(node --version)" || exit -1
+  export LTS_NODE_LATEST_VERSION="$(nvm version-remote --lts)" || exit -1
   if test "$CURRENT_NODE_VERSION" = "$LTS_NODE_LATEST_VERSION"; then
     if test "$TRAVIS_TAG"; then
       echo "logging in..."
-      echo -e "$NPM_USERNAME\n$NPM_PASSWORD\n$NPM_EMAIL" | npm login
+      echo -e "$NPM_USERNAME\n$NPM_PASSWORD\n$NPM_EMAIL" | npm login || exit -1
       echo "publishing..."
-      npm publish
+      npm publish || exit -1
       echo "...released to npm"
     else
       echo "non-tag, no need for release"
