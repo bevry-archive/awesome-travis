@@ -173,7 +173,7 @@ after_success: |
     git config --global user.name "$DEPLOY_NAME" || exit -1
     git remote rm origin || exit -1
     git remote add origin "https://$DEPLOY_USER:$DEPLOY_TOKEN@github.com/$TRAVIS_REPO_SLUG.git" || exit -1
-    npm run our:deploy || exit -1
+    npm run deploy || exit -1
     echo "...deployed"
   else
     echo "skipped deploy"
