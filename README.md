@@ -143,9 +143,9 @@ after_success: |
 
 env:
   global:
-    # https://github.com/balupton/awesome-travis#rerun-another-projects-tests
-    # travis encrypt "GITHUB_TRAVIS_TOKEN=$GITHUB_TRAVIS_TOKEN" --add env.global
-    - OTHER_REPO_SLUG='bevry/staticsitegenerators-website'
+  # https://github.com/balupton/awesome-travis#rerun-another-projects-tests
+  # travis encrypt "GITHUB_TRAVIS_TOKEN=$GITHUB_TRAVIS_TOKEN" --add env.global
+  - OTHER_REPO_SLUG='bevry/staticsitegenerators-website'
 ```
 
 This should be easier but https://github.com/travis-ci/travis.rb/issues/315 is a thing. Also don't use --debug on `travis login` as that will output the github token.
@@ -185,12 +185,12 @@ after_success: |
 
 env:
   global:
-    # https://github.com/balupton/awesome-travis#git--npm-script-deployment
-    # travis encrypt "DEPLOY_USER=$GITHUB_USERNAME" --add env.global
-    # travis encrypt "DEPLOY_TOKEN=$GITHUB_TRAVIS_TOKEN" --add env.global
-    - DEPLOY_BRANCH='master'  # this is the branch name that you want tested and deployed, set correctly
-    - DEPLOY_NAME='Travis CI Deployer'  # this is the name that is used for the deployment commit, set to whatever
-    - DEPLOY_EMAIL='deployer@travis-ci.org'  # this is the email that is used for the deployment commit, set to whatever
+  # https://github.com/balupton/awesome-travis#git--npm-script-deployment
+  # travis encrypt "DEPLOY_USER=$GITHUB_USERNAME" --add env.global
+  # travis encrypt "DEPLOY_TOKEN=$GITHUB_TRAVIS_TOKEN" --add env.global
+  - DEPLOY_BRANCH='master'  # this is the branch name that you want tested and deployed, set correctly
+  - DEPLOY_NAME='Travis CI Deployer'  # this is the name that is used for the deployment commit, set to whatever
+  - DEPLOY_EMAIL='deployer@travis-ci.org'  # this is the email that is used for the deployment commit, set to whatever
 ```
 
 Used by [bevry/staticsitegenerators-website](https://github.com/bevry/staticsitegenerators-website)
@@ -218,15 +218,15 @@ after_success: |
     export SURGE_SLUG="$(echo $TRAVIS_REPO_SLUG | sed 's/^\(.*\)\/\(.*\)/\2.\1/')" || exit -1
     if test "$TRAVIS_BRANCH"; then
       echo "deploying branch..."
-      surge --project . --domain "$TRAVIS_BRANCH.$SURGE_SLUG.surge.sh" || exit -1
+      surge --project $SURGE_PROJECT --domain "$TRAVIS_BRANCH.$SURGE_SLUG.surge.sh" || exit -1
     fi
     if test "$TRAVIS_TAG"; then
       echo "deploying tag..."
-      surge --project . --domain "$TRAVIS_TAG.$SURGE_SLUG.surge.sh" || exit -1
+      surge --project $SURGE_PROJECT --domain "$TRAVIS_TAG.$SURGE_SLUG.surge.sh" || exit -1
     fi
     if test "$TRAVIS_COMMIT"; then
       echo "deploying commit..."
-      surge --project . --domain "$TRAVIS_COMMIT.$SURGE_SLUG.surge.sh" || exit -1
+      surge --project $SURGE_PROJECT --domain "$TRAVIS_COMMIT.$SURGE_SLUG.surge.sh" || exit -1
     fi
     echo "...released to surge"
   else
@@ -240,6 +240,7 @@ after_success: |
 env:
   global:
   # https://github.com/balupton/awesome-travis#release-to-surge
+  - SURGE_PROJECT='.'  # ths is the path that you want to deploy to surge
   # travis encrypt "SURGE_LOGIN=$SURGE_LOGIN" --add env.global
   # travis encrypt "SURGE_TOKEN=$SURGE_TOKEN" --add env.global
 ```
