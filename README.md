@@ -49,7 +49,7 @@ matrix:
     - node_js: "0.10"
 cache:
   directories:
-    - node_modules
+    - $HOME/.npm  # npm's cache
 ```
 
 Used by [bevry/base](https://github.com/bevry/base)
