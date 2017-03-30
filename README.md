@@ -8,27 +8,27 @@ The scripts in this repository are their own files, which the latest are fetched
 
 ``` yaml
 install:
-  - curl https://raw.githubusercontent.com/balupton/awesome-travis/master/scripts/npm-upgrade.bash | bash -l
+  - curl https://raw.githubusercontent.com/balupton/awesome-travis/master/scripts/node-install.bash | bash -l
 ```
 
 You probably want to change the `master` to the the current commit hash. For instance:
 
 ``` yaml
 install:
-  - curl https://raw.githubusercontent.com/balupton/awesome-travis/some-commit-hash-instead/scripts/npm-upgrade.bash | bash -l
+  - curl https://raw.githubusercontent.com/balupton/awesome-travis/some-commit-hash-instead/scripts/node-install.bash | bash -l
 ```
 
 Or you could even download it into a `.travis` folder for local use instead:
 
 ``` bash
 mkdir -p ./.travis
-wget https://raw.githubusercontent.com/balupton/awesome-travis/master/scripts/npm-upgrade.bash ./.travis/npm-upgrade.bash
-chmod +x ./.travis/npm-upgrade.bash
+wget https://raw.githubusercontent.com/balupton/awesome-travis/master/scripts/node-install.bash ./.travis/node-install.bash
+chmod +x ./.travis/node-install.bash
 ```
 
 ``` yaml
 install:
-  - ./.travis/npm-upgrade.bash
+  - ./.travis/node-install.bash
 ```
 
 
