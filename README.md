@@ -2,6 +2,35 @@
 
 Crowd-sourced list of [Travis CI](https://travis-ci.org) hooks/scripts etc to level up your `.travis.yml` file
 
+## Tips
+
+The scripts in this repository are their own files, which the latest are fetched. E.g.
+
+``` yaml
+install:
+  - curl https://rawgit.com/balupton/awesome-travis/master/scripts/npm-upgrade.bash | bash || exit -1
+```
+
+You probably want to change the `master` to the the current commit hash. For instance:
+
+``` yaml
+install:
+  - curl https://rawgit.com/balupton/awesome-travis/some-commit-has-instead/scripts/npm-upgrade.bash | bash || exit -1
+```
+
+Or you could even download it into a `.travis` folder for local use instead:
+
+``` bash
+mkdir -p ./.travis
+wget https://rawgit.com/balupton/awesome-travis/master/scripts/npm-upgrade.bash ./.travis/npm-upgrade.bash
+chmod +x ./.travis/npm-upgrade.bash
+```
+
+``` yaml
+install:
+  - ./.travis/npm-upgrade.bash || exit -1
+```
+
 
 ## Notifications
 
@@ -9,7 +38,7 @@ Crowd-sourced list of [Travis CI](https://travis-ci.org) hooks/scripts etc to le
 
 ```
 # https://github.com/balupton/awesome-travis#slack
-travis encrypt --org "$SLACK_SUBDOMAIN:$SLACK_TRAVIS_TOKEN#updates" --add notifications.slack
+travis encrypt "$SLACK_SUBDOMAIN:$SLACK_TRAVIS_TOKEN#updates" --add notifications.slack
 ```
 
 Used by [bevry/base](https://github.com/bevry/base)
@@ -19,7 +48,7 @@ Used by [bevry/base](https://github.com/bevry/base)
 
 ```
 # https://github.com/balupton/awesome-travis#email
-travis encrypt --org "$TRAVIS_NOTIFICATION_EMAIL" --add notifications.email.recipients
+travis encrypt "$TRAVIS_NOTIFICATION_EMAIL" --add notifications.email.recipients
 ```
 
 Used by [bevry/base](https://github.com/bevry/base)
@@ -50,6 +79,7 @@ matrix:
 cache:
   directories:
     - $HOME/.npm  # npm's cache
+    - $HOME/.yarn-cache  # yarn's cache
 ```
 
 Used by [bevry/base](https://github.com/bevry/base)
@@ -58,16 +88,9 @@ Used by [bevry/base](https://github.com/bevry/base)
 ### Ensure NPM is latest
 
 ``` yaml
-install: |
-  # Ensure NPM is latest
-  # https://github.com/balupton/awesome-travis#ensure-npm-is-latest
-  export CURRENT_NPM_VERSION="$(npm --version)" || exit -1
-  export LATEST_NPM_VERSION="$(npm view npm version)" || exit -1
-  if test "$CURRENT_NPM_VERSION" != "$LATEST_NPM_VERSION"; then
-    echo "running an old npm version $CURRENT_NPM_VERSION, upgrading npm to $LATEST_NPM_VERSION..."
-    npm install npm --global --cache-min=Infinity || exit -1
-    echo "...npm upgrade complete"
-  fi
+# travis configuration
+install:
+  - curl https://rawgit.com/balupton/awesome-travis/master/scripts/npm-upgrade.bash | bash || exit -1
 ```
 
 Used by [bevry/base](https://github.com/bevry/base)
@@ -76,38 +99,11 @@ Used by [bevry/base](https://github.com/bevry/base)
 ### Use LTS node version for preparation
 
 ``` yaml
-install: |
-  # Ensure dependencies install with a LTS node version
-  # https://github.com/balupton/awesome-travis#use-lts-node-version-for-preparation
-  export CURRENT_NODE_VERSION="$(node --version)" || exit -1
-  export LTS_NODE_VERSIONS="$(nvm ls-remote --lts)" || exit -1
-  if echo "$LTS_NODE_VERSIONS" | grep "$CURRENT_NODE_VERSION"; then
-    echo "running on a LTS node version, completing setup..."
-    npm run our:setup || exit -1
-    echo "...setup complete with current LTS version"
-  else
-    echo "running on a non-LTS node version, completing setup on a LTS node version..."
-    nvm install --lts || exit -1
-    export LTS_NODE_INSTALLED_VERSION="$(node --version)" || exit -1
-    npm run our:setup || exit -1
-    nvm use "$TRAVIS_NODE_VERSION" || exit -1
-    echo "...setup complete with LTS"
-  fi
-
-before_script: |
-  # Ensure compilation and linting occur on a LTS node version
-  # https://github.com/balupton/awesome-travis#use-lts-node-version-for-preparation
-  if test "$LTS_NODE_INSTALLED_VERSION"; then
-    echo "running on a non-LTS node version, compiling with LTS, skipping linting..."
-    nvm use "$LTS_NODE_INSTALLED_VERSION" || exit -1
-    npm run our:compile || exit -1
-    nvm use "$TRAVIS_NODE_VERSION" || exit -1
-    echo "...compiled"
-  else
-    echo "running on a LTS node version, compiling and linting..."
-    npm run our:compile && npm run our:verify || exit -1
-    echo "...compiled and linted"
-  fi
+# travis configuration
+install:
+  - curl https://rawgit.com/balupton/awesome-travis/master/scripts/npm-install.bash | bash || exit -1
+before_script:
+  - curl https://rawgit.com/balupton/awesome-travis/master/scripts/npm-verify.bash | bash || exit -1
 ```
 
 Used by [bevry/base](https://github.com/bevry/base)
@@ -121,34 +117,17 @@ Useful for when you have a content repository that is used by a different reposi
 
 Create your `GITHUB_TRAVIS_TOKEN` by creating a [GitHub Personal Access Token](https://help.github.com/articles/creating-an-access-token-for-command-line-use/) with the `repo` permission.
 
-``` yaml
-after_success: |
-  # Rerun another project's tests
-  # https://github.com/balupton/awesome-travis#rerun-another-projects-tests
-  if [ ! -z $GITHUB_TRAVIS_TOKEN ]; then
-    echo "pinging $OTHER_REPO_SLUG..."
-    rvm install 2.1 || exit -1
-    gem install travis curb --no-rdoc --no-ri || exit -1
-    travis login --skip-completion-check --org --github-token "$GITHUB_TRAVIS_TOKEN" || exit -1
-    export TRAVIS_ACCESS_TOKEN=`cat ~/.travis/config.yml | grep access_token | sed 's/ *access_token: *//'` || exit -1
-    travis restart --debug --skip-completion-check --org -r "$OTHER_REPO_SLUG" -t "$TRAVIS_ACCESS_TOKEN" || exit -1
-    echo "pinged $OTHER_REPO_SLUG"
-  else
-    echo "skipped ping $OTHER_REPO_SLUG"
-  fi
-
-
-# ========================================
-# Custom Configuration
-
-env:
-  global:
-  # https://github.com/balupton/awesome-travis#rerun-another-projects-tests
-  # travis encrypt "GITHUB_TRAVIS_TOKEN=$GITHUB_TRAVIS_TOKEN" --add env.global
-  - OTHER_REPO_SLUG='bevry/staticsitegenerators-website'
+``` bash
+# configuration commands
+travis env set GITHUB_TRAVIS_TOKEN "$GITHUB_TRAVIS_TOKEN"
+travis env set OTHER_REPO_SLUG "bevry/staticsitegenerators-website" --private
 ```
 
-This should be easier but https://github.com/travis-ci/travis.rb/issues/315 is a thing. Also don't use --debug on `travis login` as that will output the github token.
+``` yaml
+# travis configuration
+after_success:
+  - curl https://rawgit.com/balupton/awesome-travis/master/scripts/travis-another.bash | bash || exit -1
+```
 
 Used by [bevry/staticsitegenerators-list](https://github.com/bevry/staticsitegenerators-list)
 
@@ -159,38 +138,23 @@ If the tests succeeded on the branch that we deploy, then prepare git for a push
 
 Create your `GITHUB_TRAVIS_TOKEN` by creating a [GitHub Personal Access Token](https://help.github.com/articles/creating-an-access-token-for-command-line-use/) with the `repo` permission.
 
+``` bash
+# configuration commands
+travis env set DEPLOY_USER "$GITHUB_USERNAME"
+travis env set DEPLOY_TOKEN "$GITHUB_TRAVIS_TOKEN"
+
+# this is the branch name that you want tested and deployed, set correctly
+travis env set DEPLOY_BRANCH "master" --public
+# this is the name that is used for the deployment commit, set to whatever
+travis env set DEPLOY_NAME "Travis CI Deployer" --public
+# this is the email that is used for the deployment commit, set to whatever
+travis env set DEPLOY_EMAIL "deployer@travis-ci.org" --public
+```
+
 ``` yaml
-# Deployment
-after_success: |
-  # Git + NPM Script Deployment
-  # https://github.com/balupton/awesome-travis#git--npm-script-deployment
-  if ([ ! -z "$DEPLOY_TOKEN" ] &&
-      [ "$TRAVIS_BRANCH" == "$DEPLOY_BRANCH" ] &&
-      [ -z "$TRAVIS_TAG" ] &&
-      [ "$TRAVIS_PULL_REQUEST" == "false" ]); then
-    echo "deploying..."
-    git config --global user.email "$DEPLOY_EMAIL" || exit -1
-    git config --global user.name "$DEPLOY_NAME" || exit -1
-    git remote rm origin || exit -1
-    git remote add origin "https://$DEPLOY_USER:$DEPLOY_TOKEN@github.com/$TRAVIS_REPO_SLUG.git" || exit -1
-    npm run deploy || exit -1
-    echo "...deployed"
-  else
-    echo "skipped deploy"
-  fi
-
-
-# ========================================
-# Custom Configuration
-
-env:
-  global:
-  # https://github.com/balupton/awesome-travis#git--npm-script-deployment
-  # travis encrypt "DEPLOY_USER=$GITHUB_USERNAME" --add env.global
-  # travis encrypt "DEPLOY_TOKEN=$GITHUB_TRAVIS_TOKEN" --add env.global
-  - DEPLOY_BRANCH='master'  # this is the branch name that you want tested and deployed, set correctly
-  - DEPLOY_NAME='Travis CI Deployer'  # this is the name that is used for the deployment commit, set to whatever
-  - DEPLOY_EMAIL='deployer@travis-ci.org'  # this is the email that is used for the deployment commit, set to whatever
+# travis configuration
+after_success:
+  - curl https://rawgit.com/balupton/awesome-travis/master/scripts/github-pages.bash | bash || exit -1
 ```
 
 Used by [bevry/staticsitegenerators-website](https://github.com/bevry/staticsitegenerators-website)
@@ -202,47 +166,19 @@ If the tests succeeded, then deploy our release to [Surge](https://surge.sh) URL
 
 Fetch your `SURGE_TOKEN` via the `surge token` command.
 
+``` bash
+# configuration commands
+travis env set SURGE_LOGIN "$SURGE_LOGIN"
+travis env set SURGE_TOKEN "$SURGE_TOKEN"
+
+# this is the path that you want to deploy to surge
+travis env set SURGE_PROJECT "." --public
+```
+
 ``` yaml
-after_success: |
-  # Release to Surge
-  # https://github.com/balupton/awesome-travis#release-to-surge
-  export CURRENT_NODE_VERSION="$(node --version)" || exit -1
-  export LTS_NODE_LATEST_VERSION="$(nvm version-remote --lts)" || exit -1
-  if test "$CURRENT_NODE_VERSION" = "$LTS_NODE_LATEST_VERSION"; then
-    echo "running on latest LTS node version, performing release to surge..."
-    echo "preparing release"
-    npm run our:meta || exit -1
-    echo "installing surge"
-    npm install surge || exit -1
-    echo "performing deploy"
-    export SURGE_SLUG="$(echo $TRAVIS_REPO_SLUG | sed 's/^\(.*\)\/\(.*\)/\2.\1/')" || exit -1
-    if test "$TRAVIS_BRANCH"; then
-      echo "deploying branch..."
-      surge --project $SURGE_PROJECT --domain "$TRAVIS_BRANCH.$SURGE_SLUG.surge.sh" || exit -1
-    fi
-    if test "$TRAVIS_TAG"; then
-      echo "deploying tag..."
-      surge --project $SURGE_PROJECT --domain "$TRAVIS_TAG.$SURGE_SLUG.surge.sh" || exit -1
-    fi
-    if test "$TRAVIS_COMMIT"; then
-      echo "deploying commit..."
-      surge --project $SURGE_PROJECT --domain "$TRAVIS_COMMIT.$SURGE_SLUG.surge.sh" || exit -1
-    fi
-    echo "...released to surge"
-  else
-    echo "running on non-latest LTS node version, skipping release to surge"
-  fi
-
-
-# ========================================
-# Custom Configuration
-
-env:
-  global:
-  # https://github.com/balupton/awesome-travis#release-to-surge
-  - SURGE_PROJECT='.'  # ths is the path that you want to deploy to surge
-  # travis encrypt "SURGE_LOGIN=$SURGE_LOGIN" --add env.global
-  # travis encrypt "SURGE_TOKEN=$SURGE_TOKEN" --add env.global
+# travis configuration
+after_success:
+  - curl https://rawgit.com/balupton/awesome-travis/master/scripts/surge.bash | bash || exit -1
 ```
 
 Used by [bevry/base](https://github.com/bevry/base) with example at [bevry/badges](https://github.com/bevry/badges)
@@ -252,36 +188,17 @@ Used by [bevry/base](https://github.com/bevry/base) with example at [bevry/badge
 
 If the tests succeeded and travis is running on a tag and on the latest node.js LTS version, then perform an `npm publish`. Useful such that git tags can be published to npm, allowing any contributor to git able to do npm releases. When combined with other npm scripts, this can help automate a lot.
 
+``` bash
+# configuration commands
+travis env set NPM_USERNAME "$NPM_USERNAME"
+travis env set NPM_PASSWORD "$NPM_PASSWORD"
+travis env set NPM_EMAIL "$NPM_EMAIL"
+```
+
 ``` yaml
-after_success: |
-  # Release to NPM
-  # https://github.com/balupton/awesome-travis#release-to-npm
-  export CURRENT_NODE_VERSION="$(node --version)" || exit -1
-  export LTS_NODE_LATEST_VERSION="$(nvm version-remote --lts)" || exit -1
-  if test "$CURRENT_NODE_VERSION" = "$LTS_NODE_LATEST_VERSION"; then
-    if test "$TRAVIS_TAG"; then
-      echo "logging in..."
-      echo -e "$NPM_USERNAME\n$NPM_PASSWORD\n$NPM_EMAIL" | npm login || exit -1
-      echo "publishing..."
-      npm publish || exit -1
-      echo "...released to npm"
-    else
-      echo "non-tag, no need for release"
-    fi
-  else
-    echo "running on non-latest LTS node version, skipping release to npm"
-  fi
-
-
-# ========================================
-# Custom Configuration
-
-env:
-  global:
-  # https://github.com/balupton/awesome-travis#release-to-npm
-  # travis encrypt "NPM_USERNAME=$NPM_USERNAME" --add env.global
-  # travis encrypt "NPM_PASSWORD=$NPM_PASSWORD" --add env.global
-  # travis encrypt "NPM_EMAIL=$NPM_EMAIL" --add env.global
+# travis configuration
+after_success:
+  - curl https://rawgit.com/balupton/awesome-travis/master/scripts/npm-publish.bash | bash || exit -1
 ```
 
 Used by [bevry/base](https://github.com/bevry/base) with example at [bevry/badges](https://github.com/bevry/badges)
