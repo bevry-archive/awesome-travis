@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# External Environment Variables:
+# User Environment Variables:
 # GITHUB_TRAVIS_TOKEN
 # OTHER_REPO_SLUG
 

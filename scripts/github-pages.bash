@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# External Environment Variables:
+# User Environment Variables:
 # DEPLOY_EMAIL
 # DEPLOY_NAME
 # DEPLOY_USER

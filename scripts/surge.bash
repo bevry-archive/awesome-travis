@@ -4,19 +4,30 @@
 # surge
 
 # External Environment Variables:
-# SURGE_PROJECT
+# TRAVIS_REPO_SLUG
+
+# User Environment Variables:
 # SURGE_LOGIN
 # SURGE_TOKEN
+export SURGE_PROJECT
+if test -z "$DESIRED_NODE_VERSION"; then
+	SURGE_PROJECT="."
+fi
+export DESIRED_NODE_VERSION
+if test -z "$DESIRED_NODE_VERSION"; then
+	DESIRED_NODE_VERSION="$(nvm version-remote --lts)" || exit -1
+else
+	DESIRED_NODE_VERSION="$(nvm version-remote "$DESIRED_NODE_VERSION")" || exit -1
+fi
 
 # Local Environment Variables:
 export CURRENT_NODE_VERSION
-export LTS_NODE_LATEST_VERSION
-export SURGE_SLUG
 CURRENT_NODE_VERSION="$(node --version)" || exit -1
-LTS_NODE_LATEST_VERSION="$(nvm version-remote --lts)" || exit -1
 
-if test "$CURRENT_NODE_VERSION" = "$LTS_NODE_LATEST_VERSION"; then
-	echo "running on latest LTS node version, performing release to surge..."
+# Run
+if test "$CURRENT_NODE_VERSION" = "$DESIRED_NODE_VERSION"; then
+	echo "running on node version $CURRENT_NODE_VERSION which IS the desired $DESIRED_NODE_VERSION"
+	echo "performing release to surge..."
 	echo "preparing release"
 	npm run our:meta || exit -1
 	echo "performing deploy"
@@ -35,5 +46,6 @@ if test "$CURRENT_NODE_VERSION" = "$LTS_NODE_LATEST_VERSION"; then
 	fi
 	echo "...released to surge"
 else
-	echo "running on non-latest LTS node version, skipping release to surge"
+	echo "running on node version $CURRENT_NODE_VERSION which IS NOT the desired $DESIRED_NODE_VERSION"
+	echo "skipping release to surge"
 fi

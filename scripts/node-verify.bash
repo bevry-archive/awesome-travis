@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# External Environment Variables:
+# User Environment Variables:
 export DESIRED_NODE_VERSION
 if test -z "$DESIRED_NODE_VERSION"; then
 	DESIRED_NODE_VERSION="$(nvm version-remote --lts)" || exit -1

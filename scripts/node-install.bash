@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# External Environment Variables:
+# User Environment Variables:
 export DESIRED_NODE_VERSION
 if test -z "$DESIRED_NODE_VERSION"; then
 	DESIRED_NODE_VERSION="$(nvm version-remote --lts)" || exit -1
@@ -23,19 +23,18 @@ if test "$ORIGINAL_NODE_VERSION" = "$DESIRED_NODE_VERSION"; then
 	npm run our:setup || exit -1
 	echo "...setup complete with $ORIGINAL_NODE_VERSION"
 else
-	echo "running on the non-LTS node version $ORIGINAL_NODE_VERSION"
+	echo "running on node version $CURRENT_NODE_VERSION which IS NOT the desired $DESIRED_NODE_VERSION"
 
-	echo "installing a LTS version..."
-	nvm install --lts || exit -1
-	LTS_NODE_INSTALLED_VERSION="$(node --version)" || exit -1
-	echo "...installed the LTS version $LTS_NODE_INSTALLED_VERSION"
+	echo "installing the desired version..."
+	nvm install "$DESIRED_NODE_VERSION" || exit -1
+	echo "...installed the desired $DESIRED_NODE_VERSION"
 
 	# upgrade npm on original node version
 	# eval "$(curl -s https://raw.githubusercontent.com/balupton/awesome-travis/master/scripts/node-upgrade-npm.bash)"
 
-	echo "completing setup with $LTS_NODE_INSTALLED_VERSION..."
+	echo "completing setup with $DESIRED_NODE_VERSION..."
 	npm run our:setup || exit -1
-	echo "...setup complete with $LTS_NODE_INSTALLED_VERSION"
+	echo "...setup complete with $DESIRED_NODE_VERSION"
 
 	echo "switching back to $ORIGINAL_NODE_VERSION"
 	nvm use "$ORIGINAL_NODE_VERSION" || exit -1
