@@ -8,14 +8,14 @@ The scripts in this repository are their own files, which the latest are fetched
 
 ``` yaml
 install:
-  - curl https://raw.githubusercontent.com/balupton/awesome-travis/master/scripts/node-install.bash | bash -l
+  - curl -s https://raw.githubusercontent.com/balupton/awesome-travis/master/scripts/node-install.bash | bash -l
 ```
 
 You probably want to change the `master` to the the current commit hash. For instance:
 
 ``` yaml
 install:
-  - curl https://raw.githubusercontent.com/balupton/awesome-travis/some-commit-hash-instead/scripts/node-install.bash | bash -l
+  - curl -s https://raw.githubusercontent.com/balupton/awesome-travis/some-commit-hash-instead/scripts/node-install.bash | bash -l
 ```
 
 Or you could even download it into a `.travis` folder for local use instead:
@@ -88,9 +88,9 @@ Used by [bevry/base](https://github.com/bevry/base)
 ``` yaml
 # travis configuration
 install:
-  - curl https://raw.githubusercontent.com/balupton/awesome-travis/master/scripts/node-install.bash | bash -l
+  - curl -s https://raw.githubusercontent.com/balupton/awesome-travis/master/scripts/node-install.bash | bash -l
 before_script:
-  - curl https://raw.githubusercontent.com/balupton/awesome-travis/master/scripts/node-verify.bash | bash -l
+  - curl -s https://raw.githubusercontent.com/balupton/awesome-travis/master/scripts/node-verify.bash | bash -l
 ```
 
 Used by [bevry/base](https://github.com/bevry/base)
@@ -101,7 +101,7 @@ Used by [bevry/base](https://github.com/bevry/base)
 ``` yaml
 # travis configuration
 install:
-  - curl https://raw.githubusercontent.com/balupton/awesome-travis/master/scripts/node-upgrade-npm.bash | bash -l
+  - curl -s https://raw.githubusercontent.com/balupton/awesome-travis/master/scripts/node-upgrade-npm.bash | bash -l
 ```
 
 Used by [bevry/base](https://github.com/bevry/base)
@@ -124,7 +124,7 @@ travis env set OTHER_REPO_SLUG "bevry/staticsitegenerators-website" --private
 ``` yaml
 # travis configuration
 after_success:
-  - curl https://raw.githubusercontent.com/balupton/awesome-travis/master/scripts/travis-another.bash | bash -l
+  - curl -s https://raw.githubusercontent.com/balupton/awesome-travis/master/scripts/travis-another.bash | bash -l
 ```
 
 Used by [bevry/staticsitegenerators-list](https://github.com/bevry/staticsitegenerators-list)
@@ -152,7 +152,7 @@ travis env set DEPLOY_EMAIL "deployer@travis-ci.org" --public
 ``` yaml
 # travis configuration
 after_success:
-  - curl https://raw.githubusercontent.com/balupton/awesome-travis/master/scripts/github-pages.bash | bash -l
+  - curl -s https://raw.githubusercontent.com/balupton/awesome-travis/master/scripts/github-pages.bash | bash -l
 ```
 
 Used by [bevry/staticsitegenerators-website](https://github.com/bevry/staticsitegenerators-website)
@@ -181,7 +181,7 @@ yarn add --dev surge
 ``` yaml
 # travis configuration
 after_success:
-  - curl https://raw.githubusercontent.com/balupton/awesome-travis/master/scripts/surge.bash | bash -l
+  - curl -s https://raw.githubusercontent.com/balupton/awesome-travis/master/scripts/surge.bash | bash -l
 ```
 
 Used by [bevry/base](https://github.com/bevry/base) with example at [bevry/badges](https://github.com/bevry/badges)
@@ -201,7 +201,7 @@ travis env set NPM_EMAIL "$NPM_EMAIL"
 ``` yaml
 # travis configuration
 after_success:
-  - curl https://raw.githubusercontent.com/balupton/awesome-travis/master/scripts/node-publish.bash | bash -l
+  - curl -s https://raw.githubusercontent.com/balupton/awesome-travis/master/scripts/node-publish.bash | bash -l
 ```
 
 Used by [bevry/base](https://github.com/bevry/base) with example at [bevry/badges](https://github.com/bevry/badges)
