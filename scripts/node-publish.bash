@@ -1,14 +1,22 @@
 #!/bin/bash
-# Release to NPM
-# https://github.com/balupton/awesome-travis#release-to-npm
 
-export ORIGINAL_NODE_VERSION
-export LTS_NODE_LATEST_VERSION
+# External Environment Variables:
+export DESIRED_NODE_VERSION
+if test -z "$DESIRED_NODE_VERSION"; then
+	DESIRED_NODE_VERSION="$(nvm version-remote --lts)" || exit -1
+else
+	DESIRED_NODE_VERSION="$(nvm version-remote "$DESIRED_NODE_VERSION")" || exit -1
+fi
 
-ORIGINAL_NODE_VERSION="$(node --version)" || exit -1
-LTS_NODE_LATEST_VERSION="$(nvm version-remote --lts)" || exit -1
-if test "$ORIGINAL_NODE_VERSION" = "$LTS_NODE_LATEST_VERSION"; then
+# Local Environment Variables:
+export CURRENT_NODE_VERSION
+CURRENT_NODE_VERSION="$(node --version)" || exit -1
+
+# Run
+if test "$CURRENT_NODE_VERSION" = "$DESIRED_NODE_VERSION"; then
+	echo "running on node version $CURRENT_NODE_VERSION which IS the desired $DESIRED_NODE_VERSION"
 	if test "$TRAVIS_TAG"; then
+		echo "releasing to npm..."
 		echo "logging in..."
 		echo -e "$NPM_USERNAME\n$NPM_PASSWORD\n$NPM_EMAIL" | npm login || exit -1
 		echo "publishing..."
@@ -18,5 +26,6 @@ if test "$ORIGINAL_NODE_VERSION" = "$LTS_NODE_LATEST_VERSION"; then
 		echo "non-tag, no need for release"
 	fi
 else
-	echo "running on non-latest LTS node version, skipping release to npm"
+	echo "running on node version $CURRENT_NODE_VERSION which IS NOT the desired $DESIRED_NODE_VERSION"
+	echo "skipping release to npm"
 fi

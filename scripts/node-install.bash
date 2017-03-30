@@ -1,15 +1,23 @@
 #!/bin/bash
-# Ensure dependencies install with a LTS node version
-# https://github.com/balupton/awesome-travis#use-lts-node-version-for-preparation
 
+# External Environment Variables:
+export DESIRED_NODE_VERSION
+if test -z "$DESIRED_NODE_VERSION"; then
+	DESIRED_NODE_VERSION="$(nvm version-remote --lts)" || exit -1
+else
+	DESIRED_NODE_VERSION="$(nvm version-remote "$DESIRED_NODE_VERSION")" || exit -1
+fi
+
+# Local Environment Variables:
 export ORIGINAL_NODE_VERSION
-export LTS_NODE_VERSIONS
-export LTS_NODE_INSTALLED_VERSION
-
 ORIGINAL_NODE_VERSION="$(node --version)" || exit -1
-LTS_NODE_VERSIONS="$(nvm ls-remote --lts)" || exit -1
-if echo "$LTS_NODE_VERSIONS" | grep "$ORIGINAL_NODE_VERSION"; then
-	echo "running on the LTS node version $ORIGINAL_NODE_VERSION"
+
+# upgrade npm on original node version
+# eval "$(curl -s https://raw.githubusercontent.com/balupton/awesome-travis/master/scripts/node-upgrade-npm.bash)"
+
+# Run
+if test "$ORIGINAL_NODE_VERSION" = "$DESIRED_NODE_VERSION"; then
+	echo "running on node version $ORIGINAL_NODE_VERSION which IS the desired $DESIRED_NODE_VERSION"
 
 	echo "completing setup with $ORIGINAL_NODE_VERSION..."
 	npm run our:setup || exit -1
@@ -21,6 +29,9 @@ else
 	nvm install --lts || exit -1
 	LTS_NODE_INSTALLED_VERSION="$(node --version)" || exit -1
 	echo "...installed the LTS version $LTS_NODE_INSTALLED_VERSION"
+
+	# upgrade npm on original node version
+	# eval "$(curl -s https://raw.githubusercontent.com/balupton/awesome-travis/master/scripts/node-upgrade-npm.bash)"
 
 	echo "completing setup with $LTS_NODE_INSTALLED_VERSION..."
 	npm run our:setup || exit -1

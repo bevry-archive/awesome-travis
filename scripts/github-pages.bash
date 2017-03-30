@@ -1,7 +1,12 @@
 #!/bin/bash
 
-# Git + NPM Script Deployment
-# https://github.com/balupton/awesome-travis#git--npm-script-deployment
+# External Environment Variables:
+# DEPLOY_EMAIL
+# DEPLOY_NAME
+# DEPLOY_USER
+# DEPLOY_TOKEN
+# DEPLOY_BRANCH
+
 if ([ ! -z "$DEPLOY_TOKEN" ] &&
 	[ "$TRAVIS_BRANCH" == "$DEPLOY_BRANCH" ] &&
 	[ -z "$TRAVIS_TAG" ] &&
