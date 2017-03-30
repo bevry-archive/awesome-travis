@@ -171,6 +171,11 @@ travis env set SURGE_TOKEN "$SURGE_TOKEN"
 
 # this is the path that you want to deploy to surge
 travis env set SURGE_PROJECT "." --public
+
+# make sure surge exists as a npm development dependency
+npm install --save-dev surge
+# or if you are using yarn
+yarn add --dev surge
 ```
 
 ``` yaml
