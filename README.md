@@ -15,7 +15,7 @@ You probably want to change the `master` to the the current commit hash. For ins
 
 ``` yaml
 install:
-  - curl https://rawgit.com/balupton/awesome-travis/some-commit-has-instead/scripts/npm-upgrade.bash | bash || exit -1
+  - curl https://rawgit.com/balupton/awesome-travis/some-commit-hash-instead/scripts/npm-upgrade.bash | bash || exit -1
 ```
 
 Or you could even download it into a `.travis` folder for local use instead:
