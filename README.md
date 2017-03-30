@@ -36,8 +36,7 @@ install:
 
 ### Slack
 
-```
-# https://github.com/balupton/awesome-travis#slack
+``` bash
 travis encrypt "$SLACK_SUBDOMAIN:$SLACK_TRAVIS_TOKEN#updates" --add notifications.slack
 ```
 
@@ -46,8 +45,7 @@ Used by [bevry/base](https://github.com/bevry/base)
 
 ### Email
 
-```
-# https://github.com/balupton/awesome-travis#email
+``` bash
 travis encrypt "$TRAVIS_NOTIFICATION_EMAIL" --add notifications.email.recipients
 ```
 
