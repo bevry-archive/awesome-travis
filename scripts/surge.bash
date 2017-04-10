@@ -10,7 +10,7 @@
 # SURGE_LOGIN
 # SURGE_TOKEN
 export SURGE_PROJECT
-if test -z "$DESIRED_NODE_VERSION"; then
+if test -z "$SURGE_PROJECT"; then
 	SURGE_PROJECT="."
 fi
 export DESIRED_NODE_VERSION
