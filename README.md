@@ -118,7 +118,7 @@ Create your `GITHUB_TRAVIS_TOKEN` by creating a [GitHub Personal Access Token](h
 ``` bash
 # configuration commands
 travis env set GITHUB_TRAVIS_TOKEN "$GITHUB_TRAVIS_TOKEN"
-travis env set OTHER_REPO_SLUG "bevry/staticsitegenerators-website" --private
+travis env set OTHER_REPO_SLUG "bevry/staticsitegenerators-website" --public
 ```
 
 ``` yaml
