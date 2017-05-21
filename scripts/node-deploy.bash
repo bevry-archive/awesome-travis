@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# User Environment Variables:
+# DEPLOY_BRANCH
+
 if ([ "$TRAVIS_BRANCH" == "$DEPLOY_BRANCH" ] &&
 	[ -z "$TRAVIS_TAG" ] &&
 	[ "$TRAVIS_PULL_REQUEST" == "false" ]); then
