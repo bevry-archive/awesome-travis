@@ -123,7 +123,13 @@ travis env set OTHER_REPO_SLUG "bevry/staticsitegenerators-website" --public
 
 ``` yaml
 # travis configuration
-after_success:
+sudo: false
+language: ruby
+rvm:
+  - "2.2"
+install:
+  - gem install travis --no-rdoc --no-ri
+script:
   - eval "$(curl -s https://raw.githubusercontent.com/balupton/awesome-travis/master/scripts/travis-another.bash)"
 ```
 
