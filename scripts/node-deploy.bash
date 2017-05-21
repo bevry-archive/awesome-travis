@@ -1,7 +1,6 @@
 #!/bin/bash
 
-if ([ ! -z "$DEPLOY_TOKEN" ] &&
-	[ "$TRAVIS_BRANCH" == "$DEPLOY_BRANCH" ] &&
+if ([ "$TRAVIS_BRANCH" == "$DEPLOY_BRANCH" ] &&
 	[ -z "$TRAVIS_TAG" ] &&
 	[ "$TRAVIS_PULL_REQUEST" == "false" ]); then
 	echo "deploying..."
