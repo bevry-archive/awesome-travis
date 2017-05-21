@@ -9,8 +9,6 @@ export TRAVIS_ACCESS_TOKEN
 
 if [ ! -z $GITHUB_TRAVIS_TOKEN ]; then
 	echo "pinging $OTHER_REPO_SLUG..."
-	rvm install 2.1 || exit -1
-	gem install travis curb --no-rdoc --no-ri || exit -1
 
 	# This should be easier but https://github.com/travis-ci/travis.rb/issues/315 is a thing. Also don't use --debug on `travis login` as that will output the github token.
 	travis login --skip-completion-check --org --github-token "$GITHUB_TRAVIS_TOKEN" || exit -1
