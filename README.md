@@ -136,16 +136,34 @@ script:
 Used by [bevry/staticsitegenerators-list](https://github.com/bevry/staticsitegenerators-list)
 
 
-### Git + NPM Script Deployment
+### Command Deployment
 
-If the tests succeeded on the branch that we deploy, then prepare git for a push and runs the custom [npm script](https://docs.npmjs.com/misc/scripts) `our:deploy` after a successful test. The `our:deploy` script should be something that generates your website and runs a `git push origin`. Useful for [GitHub Pages](https://pages.github.com) deployments.
+If the tests succeed on the specified `DEPLOY_BRANCH`, then run the `DEPLOY_COMMAND`.
 
-Create your `GITHUB_TRAVIS_TOKEN` by creating a [GitHub Personal Access Token](https://help.github.com/articles/creating-an-access-token-for-command-line-use/) with the `repo` permission.
+``` bash
+# this is the branch name that you want tested and deployed, set correctly
+travis env set DEPLOY_BRANCH "master" --public
+# this is the command that will do the compilation and git push
+travis env set DEPLOY_COMMAND "npm run deploy" --public
+```
+
+``` yaml
+# travis configuration
+after_success:
+  - eval "$(curl -s https://raw.githubusercontent.com/balupton/awesome-travis/master/scripts/command-deployment.bash)"
+```
+
+
+### Git Deployment
+
+If the tests succeed on the specified `DEPLOY_BRANCH`, then prepare git for deployment, and then run the `DEPLOY_COMMAND`. The `DEPLOY_COMMAND` should be the command responsible for the compilation, git add, git commit, and git push.
+
+Create your `GITHUB_TOKEN` by creating a [GitHub Personal Access Token](https://help.github.com/articles/creating-an-access-token-for-command-line-use/) with the `repo` permission.
 
 ``` bash
 # configuration commands
 travis env set DEPLOY_USER "$GITHUB_USERNAME"
-travis env set DEPLOY_TOKEN "$GITHUB_TRAVIS_TOKEN"
+travis env set DEPLOY_TOKEN "$GITHUB_TOKEN"
 
 # this is the branch name that you want tested and deployed, set correctly
 travis env set DEPLOY_BRANCH "master" --public
@@ -153,15 +171,15 @@ travis env set DEPLOY_BRANCH "master" --public
 travis env set DEPLOY_NAME "Travis CI Deployer" --public
 # this is the email that is used for the deployment commit, set to whatever
 travis env set DEPLOY_EMAIL "deployer@travis-ci.org" --public
+# this is the command that will do the compilation and git push
+travis env set DEPLOY_COMMAND "npm run deploy" --public
 ```
 
 ``` yaml
 # travis configuration
 after_success:
-  - eval "$(curl -s https://raw.githubusercontent.com/balupton/awesome-travis/master/scripts/github-pages.bash)"
+  - eval "$(curl -s https://raw.githubusercontent.com/balupton/awesome-travis/master/scripts/git-deployment.bash)"
 ```
-
-Used by [bevry/staticsitegenerators-website](https://github.com/bevry/staticsitegenerators-website)
 
 
 ### Release to Surge
