@@ -1,5 +1,38 @@
 #!/bin/bash
 
+# If the tests succeeded, then deploy our release to [Surge](https://surge.sh) URLs for our branch, tag, and commit.
+# Useful for rendering documentation and compiling code then deploying the release,
+# such that you don't need the rendered documentation and compiled code inside your source repository.
+# This is beneficial because sometimes documentation will reference the current commit,
+# causing a documentation recompile to always leave a dirty state - this solution avoids that,
+# as documentation can be git ignored.
+#
+#
+# Local Installation:
+#
+# You will need to make sure you have surge installed as a local dependency,
+# using npm: npm install --save-dev surge
+# using yarn: yarn add --dev surge
+#
+#
+# Installation:
+#
+# after_success:
+#   - eval "$(curl -s https://raw.githubusercontent.com/balupton/awesome-travis/master/scripts/surge.bash)"
+#
+#
+# Configuration:
+#
+# Set your `SURGE_LOGIN` which is your surge.sh username
+# travis env set SURGE_LOGIN "$SURGE_LOGIN" --public
+#
+# Set your `SURGE_TOKEN` (which you can get via the `surge token` command)
+# travis env set SURGE_TOKEN "$SURGE_TOKEN"
+# 
+# Set the path that you want to deploy to surge
+# travis env set SURGE_PROJECT "." --public
+
+
 # Node Development Dependencies:
 # surge
 
