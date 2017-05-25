@@ -1,5 +1,14 @@
 #!/bin/bash
 
+# Ensure that the npm version is the latest.
+#
+#
+# Installation:
+#
+# after_success:
+#   - eval "$(curl -s https://raw.githubusercontent.com/balupton/awesome-travis/master/scripts/node-verify.bash)"
+
+
 # Local Environment Variables:
 export ORIGINAL_NPM_VERSION
 export LATEST_NPM_VERSION
