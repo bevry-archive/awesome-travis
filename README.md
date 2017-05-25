@@ -2,35 +2,6 @@
 
 Crowd-sourced list of [Travis CI](https://travis-ci.org) hooks/scripts etc to level up your `.travis.yml` file
 
-## Tips
-
-The scripts in this repository are their own files, which the latest are fetched. E.g.
-
-``` yaml
-install:
-  - eval "$(curl -s https://raw.githubusercontent.com/balupton/awesome-travis/master/scripts/node-install.bash)"
-```
-
-You probably want to change the `master` to the the current commit hash. For instance:
-
-``` yaml
-install:
-  - eval "$(curl -s https://raw.githubusercontent.com/balupton/awesome-travis/some-commit-hash-instead/scripts/node-install.bash)"
-```
-
-Or you could even download it into a `.travis` folder for local use instead:
-
-``` bash
-mkdir -p ./.travis
-wget https://raw.githubusercontent.com/balupton/awesome-travis/master/scripts/node-install.bash ./.travis/node-install.bash
-chmod +x ./.travis/node-install.bash
-```
-
-``` yaml
-install:
-  - ./.travis/node-install.bash
-```
-
 
 ## Notifications
 
@@ -83,31 +54,43 @@ cache:
 Used by [bevry/base](https://github.com/bevry/base)
 
 
-### Use LTS node version for preparation
+## Scripts
+
+Find scripts you can use, including their inline documentaiton, inside the [`scripts` directory](https://github.com/balupton/awesome-travis/tree/master/scripts).
+
+### Tips
+
+The scripts in this repository are their own files, which the latest are fetched. E.g.
 
 ``` yaml
-# travis configuration
 install:
   - eval "$(curl -s https://raw.githubusercontent.com/balupton/awesome-travis/master/scripts/node-install.bash)"
-before_script:
-  - eval "$(curl -s https://raw.githubusercontent.com/balupton/awesome-travis/master/scripts/node-verify.bash)"
 ```
 
-Used by [bevry/base](https://github.com/bevry/base)
-
-
-### Ensure NPM is latest
+You probably want to change the `master` to the the current commit hash. For instance:
 
 ``` yaml
-# travis configuration
 install:
-  - eval "$(curl -s https://raw.githubusercontent.com/balupton/awesome-travis/master/scripts/node-upgrade-npm.bash)"
+  - eval "$(curl -s https://raw.githubusercontent.com/balupton/awesome-travis/some-commit-hash-instead/scripts/node-install.bash)"
 ```
 
-Used by [bevry/base](https://github.com/bevry/base)
+Or you could even download it into a `.travis` folder for local use instead:
+
+``` bash
+mkdir -p ./.travis
+wget https://raw.githubusercontent.com/balupton/awesome-travis/master/scripts/node-install.bash ./.travis/node-install.bash
+chmod +x ./.travis/node-install.bash
+```
+
+``` yaml
+install:
+  - ./.travis/node-install.bash
+```
 
 
-## Deployment
+## Legacy 
+
+Older script instructions are here:
 
 ### Rerun another project's tests
 
@@ -135,51 +118,6 @@ script:
 
 Used by [bevry/staticsitegenerators-list](https://github.com/bevry/staticsitegenerators-list)
 
-
-### Command Deployment
-
-If the tests succeed on the specified `DEPLOY_BRANCH`, then run the `DEPLOY_COMMAND`.
-
-``` bash
-# this is the branch name that you want tested and deployed, set correctly
-travis env set DEPLOY_BRANCH "master" --public
-# this is the command that will do the compilation and git push
-travis env set DEPLOY_COMMAND "npm run deploy" --public
-```
-
-``` yaml
-# travis configuration
-after_success:
-  - eval "$(curl -s https://raw.githubusercontent.com/balupton/awesome-travis/master/scripts/command-deployment.bash)"
-```
-
-
-### Git Deployment
-
-If the tests succeed on the specified `DEPLOY_BRANCH`, then prepare git for deployment, and then run the `DEPLOY_COMMAND`. The `DEPLOY_COMMAND` should be the command responsible for the compilation, git add, git commit, and git push.
-
-Create your `GITHUB_TOKEN` by creating a [GitHub Personal Access Token](https://help.github.com/articles/creating-an-access-token-for-command-line-use/) with the `repo` permission.
-
-``` bash
-# configuration commands
-travis env set DEPLOY_USER "$GITHUB_USERNAME"
-travis env set DEPLOY_TOKEN "$GITHUB_TOKEN"
-
-# this is the branch name that you want tested and deployed, set correctly
-travis env set DEPLOY_BRANCH "master" --public
-# this is the name that is used for the deployment commit, set to whatever
-travis env set DEPLOY_NAME "Travis CI Deployer" --public
-# this is the email that is used for the deployment commit, set to whatever
-travis env set DEPLOY_EMAIL "deployer@travis-ci.org" --public
-# this is the command that will do the compilation and git push
-travis env set DEPLOY_COMMAND "npm run deploy" --public
-```
-
-``` yaml
-# travis configuration
-after_success:
-  - eval "$(curl -s https://raw.githubusercontent.com/balupton/awesome-travis/master/scripts/git-deployment.bash)"
-```
 
 
 ### Release to Surge
@@ -211,35 +149,12 @@ after_success:
 Used by [bevry/base](https://github.com/bevry/base) with example at [bevry/badges](https://github.com/bevry/badges)
 
 
-### Release to NPM
-
-If the tests succeeded and travis is running on a tag and on the latest node.js LTS version, then perform an `npm publish`. Useful such that git tags can be published to npm, allowing any contributor to git able to do npm releases. When combined with other npm scripts, this can help automate a lot.
-
-``` bash
-# configuration commands
-travis env set NPM_USERNAME "$NPM_USERNAME"
-travis env set NPM_PASSWORD "$NPM_PASSWORD"
-travis env set NPM_EMAIL "$NPM_EMAIL"
-```
-
-``` yaml
-# travis configuration
-after_success:
-  - eval "$(curl -s https://raw.githubusercontent.com/balupton/awesome-travis/master/scripts/node-publish.bash)"
-```
-
-Used by [bevry/base](https://github.com/bevry/base) with example at [bevry/badges](https://github.com/bevry/badges)
-
 
 ## Contribution
 
-Add headings to the appropriate sections or make a new section with your Travis CI nifties.
+Send pull requests for your scripts and config nifties! Will be awesome!
 
-Use a part? feel free to add yourself to the `Used by` lists.
-
-To keep the spirit of collaboration going, anyone who gets a pull request merged will get commit access.
-
-Avoid changing header titles, as people may reference them when they use parts.
+Although, avoid changing header titles and file names, as people may reference them when they use parts.
 
 
 ## License
