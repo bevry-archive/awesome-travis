@@ -1,5 +1,20 @@
 #!/bin/bash
 
+# Use the `DESIRED_NODE_VERSION` (defaults to the latest LTS node version) to login with npm and run `npm publish`.
+#
+#
+# Installation:
+#
+# after_success:
+#   - eval "$(curl -s https://raw.githubusercontent.com/balupton/awesome-travis/master/scripts/node-publish.bash)"
+#
+#
+# Configuration:
+#
+# To specify a specific node version (rather tha the LTS version)
+# travis env set DESIRED_NODE_VERSION "7"
+
+
 # External Environment Variables:
 export DESIRED_NODE_VERSION
 if test -z "$DESIRED_NODE_VERSION"; then
