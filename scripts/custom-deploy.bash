@@ -26,7 +26,7 @@ if ([ "$TRAVIS_BRANCH" == "$DEPLOY_BRANCH" ] &&
 	[ -z "$TRAVIS_TAG" ] &&
 	[ "$TRAVIS_PULL_REQUEST" == "false" ]); then
 	echo "deploying..."
-	echo "DEPLOY_COMMAND" || exit -1
+	eval "$DEPLOY_COMMAND" || exit -1
 	echo "...deployed"
 else
 	echo "skipped deploy"
