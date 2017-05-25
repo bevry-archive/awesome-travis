@@ -5,7 +5,7 @@
 #
 # Installation:
 #
-# after_success:
+# install:
 #   - eval "$(curl -s https://raw.githubusercontent.com/balupton/awesome-travis/master/scripts/node-upgrade-npm.bash)"
 
 
