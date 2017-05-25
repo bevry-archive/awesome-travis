@@ -12,25 +12,23 @@
 #
 # Configuration:
 #
-# Your git username:
-# travis env set DEPLOY_USER "$GITHUB_USERNAME"
-#
-# Your git password, if using GitHub,
-# this should probably be a new [GitHub Personal Access Token](https://help.github.com/articles/creating-an-access-token-for-command-line-use/)
-# with the `repo` permission:
-# travis env set DEPLOY_TOKEN "$GITHUB_TOKEN"
-# 
 # The branch name that you want tested and deployed, set correctly:
 # travis env set DEPLOY_BRANCH "master" --public
 #
+# The command that will do the compilation and git push:
+# travis env set DEPLOY_COMMAND "npm run deploy" --public
+#
+# Your git username:
+# travis env set DEPLOY_USER "$GITHUB_USERNAME" --public
+#
+# Your git password, if using GitHub, this should probably be a new [GitHub Personal Access Token](https://help.github.com/articles/creating-an-access-token-for-command-line-use/) with the `repo` permission:
+# travis env set DEPLOY_TOKEN "$GITHUB_TOKEN"
+# 
 # The name hat is used for the deployment commit, set to whatever:
 # travis env set DEPLOY_NAME "Travis CI Deployer" --public
 #
 # The email that is used for the deployment commit, set to whatever:
 # travis env set DEPLOY_EMAIL "deployer@travis-ci.org" --public
-#
-# The command that will do the compilation and git push:
-# travis env set DEPLOY_COMMAND "npm run deploy" --public
 
 
 # User Environment Variables:
