@@ -1,5 +1,32 @@
 #!/bin/bash
 
+# Trigger another travis projects tests after completion of the current travis project.
+# Useful for when you have a content repository that is used by a different repository,
+# and as such, when the content repository changes, you want to rerun the tests for the other repository,
+# perhaps even for deployment purposes.
+#
+#
+# Installation:
+#
+# sudo: false
+# language: ruby
+# rvm:
+#   - "2.2"
+# install:
+#   - gem install travis --no-rdoc --no-ri
+# script:
+#   - eval "$(curl -s https://raw.githubusercontent.com/balupton/awesome-travis/master/scripts/travis-another.bash)"
+#
+#
+# Configuration:
+#
+# Specify your [GitHub Personal Access Token](https://help.github.com/articles/creating-an-access-token-for-command-line-use/) with the `repo` permission.
+# travis env set GITHUB_TRAVIS_TOKEN "$GITHUB_TRAVIS_TOKEN"
+#
+# Specify the other repository to trigger the travis tests for:
+# travis env set OTHER_REPO_SLUG "bevry/staticsitegenerators-website" --public
+
+
 # User Environment Variables:
 # GITHUB_TRAVIS_TOKEN
 # OTHER_REPO_SLUG
