@@ -58,6 +58,7 @@ Used by [bevry/base](https://github.com/bevry/base)
 
 Find scripts you can use, including their inline documentaiton, inside the [`scripts` directory](https://github.com/balupton/awesome-travis/tree/master/scripts).
 
+
 ### Tips
 
 The scripts in this repository are their own files, which the latest are fetched. E.g.
@@ -86,68 +87,6 @@ chmod +x ./.travis/node-install.bash
 install:
   - ./.travis/node-install.bash
 ```
-
-
-## Legacy 
-
-Older script instructions are here:
-
-### Rerun another project's tests
-
-Useful for when you have a content repository that is used by a different repository, and as such, when the content repository changes, you want to rerun the tests for the other repository, perhaps even for deployment purposes.
-
-Create your `GITHUB_TRAVIS_TOKEN` by creating a [GitHub Personal Access Token](https://help.github.com/articles/creating-an-access-token-for-command-line-use/) with the `repo` permission.
-
-``` bash
-# configuration commands
-travis env set GITHUB_TRAVIS_TOKEN "$GITHUB_TRAVIS_TOKEN"
-travis env set OTHER_REPO_SLUG "bevry/staticsitegenerators-website" --public
-```
-
-``` yaml
-# travis configuration
-sudo: false
-language: ruby
-rvm:
-  - "2.2"
-install:
-  - gem install travis --no-rdoc --no-ri
-script:
-  - eval "$(curl -s https://raw.githubusercontent.com/balupton/awesome-travis/master/scripts/travis-another.bash)"
-```
-
-Used by [bevry/staticsitegenerators-list](https://github.com/bevry/staticsitegenerators-list)
-
-
-
-### Release to Surge
-
-If the tests succeeded, then deploy our release to [Surge](https://surge.sh) URLs for our branch, tag, and commit. Useful for rendering documentation and compiling code then deploying the release, such that you don't need the rendered documentation and compiled code inside your source repository. This is beneficial because sometimes documentation will reference the current commit, causing a documentation recompile to always leave a dirty state - this solution avoids that, as documentation can be git ignored.
-
-Fetch your `SURGE_TOKEN` via the `surge token` command.
-
-``` bash
-# configuration commands
-travis env set SURGE_LOGIN "$SURGE_LOGIN"
-travis env set SURGE_TOKEN "$SURGE_TOKEN"
-
-# this is the path that you want to deploy to surge
-travis env set SURGE_PROJECT "." --public
-
-# make sure surge exists as a npm development dependency
-npm install --save-dev surge
-# or if you are using yarn
-yarn add --dev surge
-```
-
-``` yaml
-# travis configuration
-after_success:
-  - eval "$(curl -s https://raw.githubusercontent.com/balupton/awesome-travis/master/scripts/surge.bash)"
-```
-
-Used by [bevry/base](https://github.com/bevry/base) with example at [bevry/badges](https://github.com/bevry/badges)
-
 
 
 ## Contribution
