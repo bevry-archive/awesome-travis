@@ -11,8 +11,17 @@
 #
 # Configuration:
 #
-# To specify a specific node version (rather tha the LTS version)
+# Specficy a specific node version (rather than the LTS version)
 # travis env set DESIRED_NODE_VERSION "7" --public
+#
+# Specify your npm username:
+# travis env set NPM_USERNAME "$NPM_USERNAME" --public
+#
+# Specify your npm password
+# travis env set NPM_PASSWORD "$NPM_PASSWORD"
+#
+# Specify your npm email
+# travis env set NPM_EMAIL "$NPM_EMAIL"
 
 
 # External Environment Variables:
