@@ -7,7 +7,7 @@
 # Installation:
 #
 # after_success:
-#   - eval "$(curl -s https://raw.githubusercontent.com/balupton/awesome-travis/master/scripts/git-deploy.bash)"
+#   - eval "$(curl -s https://raw.githubusercontent.com/balupton/awesome-travis/master/scripts/deploy-git.bash)"
 #
 #
 # Configuration:
