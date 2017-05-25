@@ -1,5 +1,22 @@
 #!/bin/bash
 
+# If our current node version is the `DESIRED_NODE_VERSION` (defaults to the latest LTS node version)
+# then compile and lint our project with: `npm run our:compile && npm run our:verify`
+# otherwise just compile our project with: `npm run our:compile`
+#
+#
+# Installation:
+#
+# after_success:
+#   - eval "$(curl -s https://raw.githubusercontent.com/balupton/awesome-travis/master/scripts/node-verify.bash)"
+#
+#
+# Configuration:
+#
+# To specify a specific node version (rather than the LTS version)
+# travis env set DESIRED_NODE_VERSION "7"
+
+
 # User Environment Variables:
 export DESIRED_NODE_VERSION
 if test -z "$DESIRED_NODE_VERSION"; then
