@@ -6,7 +6,7 @@
 # Installation:
 #
 # after_success:
-#   - eval "$(curl -s https://raw.githubusercontent.com/balupton/awesome-travis/master/scripts/node-verify.bash)"
+#   - eval "$(curl -s https://raw.githubusercontent.com/balupton/awesome-travis/master/scripts/node-upgrade-npm.bash)"
 
 
 # Local Environment Variables:
