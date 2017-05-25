@@ -14,7 +14,7 @@
 # Configuration:
 #
 # To specify a specific node version (rather than the LTS version)
-# travis env set DESIRED_NODE_VERSION "7"
+# travis env set DESIRED_NODE_VERSION "7" --public
 
 
 # User Environment Variables:
