@@ -11,11 +11,11 @@
 #
 # Configuration:
 #
-# To set a specific node version to use for setup (rather tha the LTS version), do so with:
-# travis env set DESIRED_NODE_VERSION "7"
+# To specify a specific node version (rather tha the LTS version):
+# travis env set DESIRED_NODE_VERSION "7" --public
 #
 # To setup the project with a custom command, do so with:
-# travis env set SETUP_COMMAND "npm run our:setup"
+# travis env set SETUP_COMMAND "npm run our:setup" --public
 
 
 # User Environment Variables:
