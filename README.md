@@ -11,16 +11,12 @@ Crowd-sourced list of [Travis CI](https://travis-ci.org) hooks/scripts etc to le
 travis encrypt "$SLACK_SUBDOMAIN:$SLACK_TRAVIS_TOKEN#updates" --add notifications.slack
 ```
 
-Used by [bevry/base](https://github.com/bevry/base)
-
 
 ### Email
 
 ``` bash
 travis encrypt "$TRAVIS_NOTIFICATION_EMAIL" --add notifications.email.recipients
 ```
-
-Used by [bevry/base](https://github.com/bevry/base)
 
 
 ## Node.js
@@ -50,8 +46,6 @@ cache:
     - $HOME/.npm  # npm's cache
     - $HOME/.yarn-cache  # yarn's cache
 ```
-
-Used by [bevry/base](https://github.com/bevry/base)
 
 
 ## Scripts
@@ -87,6 +81,10 @@ chmod +x ./.travis/node-install.bash
 install:
   - ./.travis/node-install.bash
 ```
+
+## Generators
+
+- [`bevry/based`](https://github.com/bevry/based) generates your project, including your `.travis.yml` file, using this awesome list
 
 
 ## Contribution
