@@ -1,5 +1,10 @@
 #!/bin/bash
 
+# Installs the `DESIRED_NODE_VERSION` if set, otherwise install latest LTS node version.
+#
+# Optional Configuration Commands:
+# travis env set DESIRED_NODE_VERSION "7"
+
 # User Environment Variables:
 export DESIRED_NODE_VERSION
 if test -z "$DESIRED_NODE_VERSION"; then
