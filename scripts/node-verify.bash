@@ -7,7 +7,7 @@
 #
 # Installation:
 #
-# after_success:
+# before_script:
 #   - eval "$(curl -s https://raw.githubusercontent.com/balupton/awesome-travis/master/scripts/node-verify.bash)"
 #
 #
