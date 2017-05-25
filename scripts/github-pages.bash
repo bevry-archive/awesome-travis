@@ -6,6 +6,7 @@
 # DEPLOY_USER
 # DEPLOY_TOKEN
 # DEPLOY_BRANCH
+# DEPLOY_COMMAND
 
 if ([ "$TRAVIS_BRANCH" == "$DEPLOY_BRANCH" ] &&
 	[ -z "$TRAVIS_TAG" ] &&
@@ -15,7 +16,7 @@ if ([ "$TRAVIS_BRANCH" == "$DEPLOY_BRANCH" ] &&
 	git config --global user.name "$DEPLOY_NAME" || exit -1
 	git remote rm origin || exit -1
 	git remote add origin "https://$DEPLOY_USER:$DEPLOY_TOKEN@github.com/$TRAVIS_REPO_SLUG.git" || exit -1
-	npm run deploy || exit -1
+	eval "$DEPLOY_COMMAND" || exit -1
 	echo "...deployed"
 else
 	echo "skipped deploy"
