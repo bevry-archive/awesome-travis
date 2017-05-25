@@ -30,8 +30,8 @@ Used by [bevry/base](https://github.com/bevry/base)
 Complete configuration for the different [node.js versions](https://github.com/nodejs/LTS) one may need to support. With legacy versions allowed to fail.
 
 ``` yaml
-# Complete Node.js Version Matrix
-# https://github.com/balupton/awesome-travis#complete-nodejs-version-matrix
+# https://github.com/balupton/awesome-travis
+sudo: false
 language: node_js
 node_js:
   - "0.8"   # end of life
