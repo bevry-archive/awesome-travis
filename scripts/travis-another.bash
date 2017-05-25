@@ -36,7 +36,15 @@ export TRAVIS_ACCESS_TOKEN
 
 if [ ! -z $GITHUB_TRAVIS_TOKEN ]; then
 	echo "pinging $OTHER_REPO_SLUG..."
-
+	
+	# install deps in case they are missing, this can happen if this script runs in combination with others
+	if ! type "gem"; then
+		rvm install 2.2
+	fi
+	if ! type "travis"; then
+		gem install travis --no-rdoc --no-ri
+	fi
+	
 	# This should be easier but https://github.com/travis-ci/travis.rb/issues/315 is a thing. Also don't use --debug on `travis login` as that will output the github token.
 	travis login --skip-completion-check --org --github-token "$GITHUB_TRAVIS_TOKEN" || exit -1
 	TRAVIS_ACCESS_TOKEN=`cat ~/.travis/config.yml | grep access_token | sed 's/ *access_token: *//'` || exit -1
