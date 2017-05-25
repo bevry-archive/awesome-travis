@@ -56,7 +56,7 @@ Used by [bevry/base](https://github.com/bevry/base)
 
 ## Scripts
 
-Find scripts you can use, including their inline documentaiton, inside the [`scripts` directory](https://github.com/balupton/awesome-travis/tree/master/scripts).
+The [`scripts` directory](https://github.com/balupton/awesome-travis/tree/master/scripts) contains scripts you can use.
 
 
 ### Tips
