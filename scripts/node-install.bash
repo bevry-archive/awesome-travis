@@ -28,7 +28,7 @@ fi
 export SETUP_COMMAND
 if test -z "$SETUP_COMMAND"; then
 	SETUP_COMMAND="npm install"
-else
+fi
 
 # Local Environment Variables:
 export ORIGINAL_NODE_VERSION; ORIGINAL_NODE_VERSION="$(node --version)" || exit -1
