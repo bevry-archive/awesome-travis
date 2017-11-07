@@ -16,9 +16,13 @@
 #
 # Specify your npm username:
 # travis env set NPM_USERNAME "$NPM_USERNAME" --public
+# OR
+# travis env set NPM_USER "$NPM_USERNAME" --public
 #
 # Specify your npm password
 # travis env set NPM_PASSWORD "$NPM_PASSWORD"
+# OR
+# travis env set NPM_PASS "$NPM_PASSWORD"
 #
 # Specify your npm email
 # travis env set NPM_EMAIL "$NPM_EMAIL"
@@ -36,13 +40,23 @@ fi
 export CURRENT_NODE_VERSION
 CURRENT_NODE_VERSION="$(node --version)" || exit -1
 
+# Export npm credentials in a way readable for npm-login-cmd.
+# This will work regardless of whether you set NPM_USER or NPM_USERNAME (respectively NPM_PASS or NPM_PASSWWRD) in your build setup.
+# If you set both, the shorter versions will have precedence.
+export NPM_USER="${NPM_USER:-NPM_USERNAME}"
+export NPM_PASS="${NPM_PASS:-NPM_PASSWORD}"
+# export NPM_EMAIL="${NPM_EMAIL:-NPM_EMAIL}"
+
 # Run
 if test "$CURRENT_NODE_VERSION" = "$DESIRED_NODE_VERSION"; then
 	echo "running on node version $CURRENT_NODE_VERSION which IS the desired $DESIRED_NODE_VERSION"
 	if test "$TRAVIS_TAG"; then
 		echo "releasing to npm..."
+		echo "installing automated npm login command..."
+		npm install npm-login-cmd --no-save || exit -1
 		echo "logging in..."
-		echo -e "$NPM_USERNAME\n$NPM_PASSWORD\n$NPM_EMAIL" | npm login || exit -1
+		npx npm-login-cmd || exit -1
+#		echo -e "$NPM_USERNAME\n$NPM_PASSWORD\n$NPM_EMAIL" | npm login || exit -1
 		echo "publishing..."
 		npm publish || exit -1
 		echo "...released to npm"
