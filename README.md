@@ -50,7 +50,7 @@ cache:
 
 ## Scripts
 
-The [`scripts` directory](https://github.com/balupton/awesome-travis/tree/master/scripts) contains scripts you can use.
+The [`scripts` directory](https://github.com/bevry/awesome-travis/tree/master/scripts) contains scripts you can use.
 
 
 ### Tips
@@ -59,21 +59,21 @@ The scripts in this repository are their own files, which the latest are fetched
 
 ``` yaml
 install:
-  - eval "$(curl -s https://raw.githubusercontent.com/balupton/awesome-travis/master/scripts/node-install.bash)"
+  - eval "$(curl -s https://raw.githubusercontent.com/bevry/awesome-travis/master/scripts/node-install.bash)"
 ```
 
 You probably want to change the `master` to the the current commit hash. For instance:
 
 ``` yaml
 install:
-  - eval "$(curl -s https://raw.githubusercontent.com/balupton/awesome-travis/some-commit-hash-instead/scripts/node-install.bash)"
+  - eval "$(curl -s https://raw.githubusercontent.com/bevry/awesome-travis/some-commit-hash-instead/scripts/node-install.bash)"
 ```
 
 Or you could even download it into a `.travis` folder for local use instead:
 
 ``` bash
 mkdir -p ./.travis
-wget https://raw.githubusercontent.com/balupton/awesome-travis/master/scripts/node-install.bash ./.travis/node-install.bash
+wget https://raw.githubusercontent.com/bevry/awesome-travis/master/scripts/node-install.bash ./.travis/node-install.bash
 chmod +x ./.travis/node-install.bash
 ```
 
