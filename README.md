@@ -26,7 +26,7 @@ travis encrypt "$TRAVIS_NOTIFICATION_EMAIL" --add notifications.email.recipients
 Complete configuration for the different [node.js versions](https://github.com/nodejs/LTS) one may need to support. With legacy versions allowed to fail.
 
 ``` yaml
-# https://github.com/balupton/awesome-travis
+# https://github.com/bevry/awesome-travis
 sudo: false
 language: node_js
 node_js:
