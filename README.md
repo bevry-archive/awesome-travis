@@ -27,20 +27,23 @@ Complete configuration for the different [node.js versions](https://github.com/n
 
 ``` yaml
 # https://github.com/bevry/awesome-travis
+# https://github.com/nodejs/LTS
 sudo: false
 language: node_js
 node_js:
   - "0.8"   # end of life
   - "0.10"  # end of life
-  - "0.12"  # maintenance
-  - "4"     # lts
-  - "6"     # lts
-  - "7"     # stable
+  - "0.12"  # end of life
+  - "4"     # maintenance lts
+  - "6"     # active lts
+  - "8"     # active lts
+  - "9"     # current
 matrix:
   fast_finish: true
   allow_failures:
     - node_js: "0.8"
     - node_js: "0.10"
+    - node_js: "0.12"
 cache:
   directories:
     - $HOME/.npm  # npm's cache
