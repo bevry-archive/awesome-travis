@@ -52,7 +52,7 @@ if test "$CURRENT_NODE_VERSION" = "$DESIRED_NODE_VERSION"; then
 				echo "creating npmrc with auth token..."
 				echo "//registry.npmjs.org/:_authToken=$NPM_AUTHTOKEN" > "$HOME/.npmrc"
 			fi
-		else if test "$NPM_USERNAME"; then
+		elif test "$NPM_USERNAME"; then
 			echo "installing automated npm login command..."
 			npm install -g npm-login-cmd || exit -1
 			echo "logging in..."
