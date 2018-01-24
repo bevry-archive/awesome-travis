@@ -45,13 +45,8 @@ if test "$CURRENT_NODE_VERSION" = "$DESIRED_NODE_VERSION"; then
 	if test "$TRAVIS_TAG"; then
 		echo "releasing to npm..."
 		if test "$NPM_AUTHTOKEN"; then
-			if test -s "$HOME/.npmrc"; then
-				echo "npmrc already exists"
-				exit -1
-			else
-				echo "creating npmrc with auth token..."
-				echo "//registry.npmjs.org/:_authToken=$NPM_AUTHTOKEN" > "$HOME/.npmrc"
-			fi
+			echo "creating npmrc with auth token..."
+			echo "//registry.npmjs.org/:_authToken=$NPM_AUTHTOKEN" > "$HOME/.npmrc"
 		elif test "$NPM_USERNAME"; then
 			echo "installing automated npm login command..."
 			npm install -g npm-login-cmd || exit -1
