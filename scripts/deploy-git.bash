@@ -7,7 +7,7 @@
 # Installation:
 #
 # after_success:
-#   - eval "$(curl -s https://raw.githubusercontent.com/balupton/awesome-travis/master/scripts/deploy-git.bash)"
+#   - eval "$(curl -s https://raw.githubusercontent.com/bevry/awesome-travis/master/scripts/deploy-git.bash)"
 #
 #
 # Configuration:
@@ -23,7 +23,7 @@
 #
 # Your git password, if using GitHub, this should probably be a new [GitHub Personal Access Token](https://help.github.com/articles/creating-an-access-token-for-command-line-use/) with the `repo` permission:
 # travis env set DEPLOY_TOKEN "$GITHUB_TOKEN"
-# 
+#
 # The name hat is used for the deployment commit, set to whatever:
 # travis env set DEPLOY_NAME "Travis CI Deployer" --public
 #

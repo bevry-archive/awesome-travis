@@ -6,7 +6,7 @@
 # Installation:
 #
 # install:
-#   - eval "$(curl -s https://raw.githubusercontent.com/balupton/awesome-travis/master/scripts/node-upgrade-npm.bash)"
+#   - eval "$(curl -s https://raw.githubusercontent.com/bevry/awesome-travis/master/scripts/node-upgrade-npm.bash)"
 
 
 # Local Environment Variables:

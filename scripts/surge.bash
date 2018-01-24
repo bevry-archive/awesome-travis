@@ -18,7 +18,7 @@
 # Installation:
 #
 # after_success:
-#   - eval "$(curl -s https://raw.githubusercontent.com/balupton/awesome-travis/master/scripts/surge.bash)"
+#   - eval "$(curl -s https://raw.githubusercontent.com/bevry/awesome-travis/master/scripts/surge.bash)"
 #
 #
 # Configuration:
@@ -28,7 +28,7 @@
 #
 # Set your `SURGE_TOKEN` (which you can get via the `surge token` command)
 # travis env set SURGE_TOKEN "$SURGE_TOKEN"
-# 
+#
 # Set the path that you want to deploy to surge
 # travis env set SURGE_PROJECT "." --public
 
