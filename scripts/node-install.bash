@@ -27,7 +27,7 @@ else
 fi
 export SETUP_COMMAND
 if test -z "$SETUP_COMMAND"; then
-	SETUP_COMMAND="npm install"
+	SETUP_COMMAND="npm run our:setup"
 fi
 
 # Local Environment Variables:
