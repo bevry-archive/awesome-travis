@@ -17,10 +17,15 @@
 # The command that will do the compilation and git push:
 # travis env set DEPLOY_COMMAND "npm run deploy" --public
 
-
-# User Environment Variables:
-# DEPLOY_BRANCH
-# DEPLOY_COMMAND
+# External Environment Variables:
+export DEPLOY_BRANCH
+if test -z "$DEPLOY_BRANCH"; then
+	DEPLOY_BRANCH="master"
+fi
+export DEPLOY_COMMAND
+if test -z "$DEPLOY_COMMAND"; then
+	DEPLOY_COMMAND="npm run our:deploy"
+fi
 
 if ([ "$TRAVIS_BRANCH" == "$DEPLOY_BRANCH" ] &&
 	[ -z "$TRAVIS_TAG" ] &&
