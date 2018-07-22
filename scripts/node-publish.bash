@@ -57,7 +57,7 @@ if test "$CURRENT_NODE_VERSION" = "$DESIRED_NODE_VERSION"; then
 			exit -1
 		fi
 		echo "publishing..."
-		npm publish || exit -1
+		npm publish --access public || exit -1
 		echo "...released to npm"
 	else
 		echo "non-tag, no need for release"
