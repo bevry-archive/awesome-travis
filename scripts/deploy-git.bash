@@ -4,12 +4,10 @@ set -ueE -o pipefail
 # If the tests succeed on the specified `DEPLOY_BRANCH`, then prepare git for deployment, and then run the `DEPLOY_COMMAND`.
 # The `DEPLOY_COMMAND` should be the command responsible for the compilation, git add, git commit, and git push.
 
-
 # TRAVIS SCRIPT
 #
 # after_success:
 #   - eval "$(curl -s https://raw.githubusercontent.com/bevry/awesome-travis/master/scripts/deploy-git.bash)"
-
 
 # TRAVIS ENVIRONMENT VARIABLES
 #
@@ -37,17 +35,15 @@ set -ueE -o pipefail
 # The email that is used for the deployment commit, set to whatever:
 # travis env set DEPLOY_EMAIL "deployer@travis-ci.org" --public
 
-
-# External Environment Variables
+# EXTERNAL ENVIRONMENT VARIABLES
 #
 # TRAVIS_BRANCH
 # TRAVIS_TAG
 # TRAVIS_PULL_REQUEST
 # TRAVIS_REPO_SLUG
 
-
 # Run
-if test "$TRAVIS_BRANCH" = "$DEPLOY_BRANCH" -a -z "$TRAVIS_TAG" -a "$TRAVIS_PULL_REQUEST" = "false"; then
+if test "${TRAVIS_BRANCH-}" = "$DEPLOY_BRANCH" -a -z "${TRAVIS_TAG-}" -a "$TRAVIS_PULL_REQUEST" = "false"; then
 	echo "deploying..."
 	git config --global user.email "$DEPLOY_EMAIL"
 	git config --global user.name "$DEPLOY_NAME"

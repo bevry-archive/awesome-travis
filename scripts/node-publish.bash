@@ -3,12 +3,10 @@ set -ueE -o pipefail
 
 # Use the `DESIRED_NODE_VERSION` (defaults to the latest LTS node version) to login with npm and run `npm publish`.
 
-
 # TRAVIS SCRIPT
 #
 # after_success:
 #   - eval "$(curl -s https://raw.githubusercontent.com/bevry/awesome-travis/master/scripts/node-publish.bash)"
-
 
 # TRAVIS ENVIRONMENT VARIABLES
 #
@@ -32,27 +30,25 @@ set -ueE -o pipefail
 # Specify your npm email
 # travis env set NPM_EMAIL "$NPM_EMAIL"
 
-
 # Default User Environment Variables
-export DESIRED_NODE_VERSION
-if test -z "$DESIRED_NODE_VERSION"; then
+if test -z "${DESIRED_NODE_VERSION-}"; then
 	DESIRED_NODE_VERSION="$(nvm version-remote --lts)"
 else
 	DESIRED_NODE_VERSION="$(nvm version-remote "$DESIRED_NODE_VERSION")"
 fi
 
 # Set Local Environment Variables
-export CURRENT_NODE_VERSION; CURRENT_NODE_VERSION="$(node --version)"
+CURRENT_NODE_VERSION="$(node --version)"
 
 # Run
 if test "$CURRENT_NODE_VERSION" = "$DESIRED_NODE_VERSION"; then
 	echo "running on node version $CURRENT_NODE_VERSION which IS the desired $DESIRED_NODE_VERSION"
-	if test "$TRAVIS_TAG"; then
+	if test "${TRAVIS_TAG-}"; then
 		echo "releasing to npm..."
-		if test "$NPM_AUTHTOKEN"; then
+		if test -n "${NPM_AUTHTOKEN-}"; then
 			echo "creating npmrc with auth token..."
 			echo "//registry.npmjs.org/:_authToken=$NPM_AUTHTOKEN" > "$HOME/.npmrc"
-		elif test "$NPM_USERNAME"; then
+		elif test -n "${NPM_USERNAME-}" -a -n "${NPM_PASSWORD-}"; then
 			echo "installing automated npm login command..."
 			npm install -g npm-login-cmd
 			echo "logging in..."

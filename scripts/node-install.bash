@@ -8,7 +8,6 @@ set -ueE -o pipefail
 # install:
 #   - eval "$(curl -s https://raw.githubusercontent.com/bevry/awesome-travis/master/scripts/node-install.bash)"
 
-
 # TRAVIS ENVIRONMENT VARIABLES
 #
 # DESIRED_NODE_VERSION
@@ -19,21 +18,18 @@ set -ueE -o pipefail
 # To setup the project with a custom command, do so with:
 # travis env set SETUP_COMMAND "npm run our:setup" --public
 
-
 # Default User Environment Variables
-export DESIRED_NODE_VERSION
-if test -z "$DESIRED_NODE_VERSION"; then
+if test -z "${DESIRED_NODE_VERSION-}"; then
 	DESIRED_NODE_VERSION="$(nvm version-remote --lts)"
 else
 	DESIRED_NODE_VERSION="$(nvm version-remote "$DESIRED_NODE_VERSION")"
 fi
-export SETUP_COMMAND
-if test -z "$SETUP_COMMAND"; then
+if test -z "${SETUP_COMMAND-}"; then
 	SETUP_COMMAND="npm run our:setup"
 fi
 
 # Set Local Environment Variables
-export ORIGINAL_NODE_VERSION; ORIGINAL_NODE_VERSION="$(node --version)"
+ORIGINAL_NODE_VERSION="$(node --version)"
 
 # Run
 if test "$ORIGINAL_NODE_VERSION" = "$DESIRED_NODE_VERSION"; then

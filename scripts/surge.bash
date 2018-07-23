@@ -8,19 +8,16 @@ set -ueE -o pipefail
 # causing a documentation recompile to always leave a dirty state - this solution avoids that,
 # as documentation can be git ignored.
 
-
 # TRAVIS SCRIPT
 #
 # after_success:
 #   - eval "$(curl -s https://raw.githubusercontent.com/bevry/awesome-travis/master/scripts/surge.bash)"
-
 
 # DEPENDENCIES
 #
 # SURGE
 # You will need to make sure you have surge installed as a local dependency,
 # using npm: npm install --save-dev surge
-
 
 # TRAVIS ENVIRONMENT VARIABLES
 #
@@ -40,27 +37,26 @@ set -ueE -o pipefail
 # Set the path that you want to deploy to surge
 # travis env set SURGE_PROJECT "." --public
 
-
 # External Environment Variables
 #
 # TRAVIS_REPO_SLUG
+# TRAVIS_BRANCH
+# TRAVIS_TAG
+# TRAVIS_COMMIT
 
 
 # Default User Environment Variables
-export SURGE_PROJECT
-if test -z "$SURGE_PROJECT"; then
+if test -z "${SURGE_PROJECT-}"; then
 	SURGE_PROJECT="."
 fi
-export DESIRED_NODE_VERSION
-if test -z "$DESIRED_NODE_VERSION"; then
-	DESIRED_NODE_VERSION="$(nvm version-remote --lts)" || exit -1
+if test -z "${DESIRED_NODE_VERSION-}"; then
+	DESIRED_NODE_VERSION="$(nvm version-remote --lts)"
 else
-	DESIRED_NODE_VERSION="$(nvm version-remote "$DESIRED_NODE_VERSION")" || exit -1
+	DESIRED_NODE_VERSION="$(nvm version-remote "$DESIRED_NODE_VERSION")"
 fi
 
 # Set Local Environment Variables
-export SURGE_SLUG
-export CURRENT_NODE_VERSION; CURRENT_NODE_VERSION="$(node --version)" || exit -1
+CURRENT_NODE_VERSION="$(node --version)"
 
 # Run
 if test "$CURRENT_NODE_VERSION" = "$DESIRED_NODE_VERSION"; then
@@ -70,15 +66,15 @@ if test "$CURRENT_NODE_VERSION" = "$DESIRED_NODE_VERSION"; then
 	npm run our:meta
 	echo "performing deploy"
 	SURGE_SLUG="$(echo "$TRAVIS_REPO_SLUG" | sed 's/^\(.*\)\/\(.*\)/\2.\1/')"
-	if test "$TRAVIS_BRANCH"; then
+	if test -n "${TRAVIS_BRANCH-}"; then
 		echo "deploying branch..."
 		surge --project $SURGE_PROJECT --domain "$TRAVIS_BRANCH.$SURGE_SLUG.surge.sh"
 	fi
-	if test "$TRAVIS_TAG"; then
+	if test -n "${TRAVIS_TAG-}"; then
 		echo "deploying tag..."
 		surge --project $SURGE_PROJECT --domain "$TRAVIS_TAG.$SURGE_SLUG.surge.sh"
 	fi
-	if test "$TRAVIS_COMMIT"; then
+	if test "${TRAVIS_COMMIT-}"; then
 		echo "deploying commit..."
 		surge --project $SURGE_PROJECT --domain "$TRAVIS_COMMIT.$SURGE_SLUG.surge.sh"
 	fi

@@ -5,12 +5,10 @@ set -ueE -o pipefail
 # then compile and lint our project with: `npm run our:compile && npm run our:verify`
 # otherwise just compile our project with: `npm run our:compile`
 
-
 # TRAVIS SCRIPT
 #
 # before_script:
 #   - eval "$(curl -s https://raw.githubusercontent.com/bevry/awesome-travis/master/scripts/node-verify.bash)"
-
 
 # TRAVIS ENVIRONMENT VARIABLES
 #
@@ -26,25 +24,21 @@ set -ueE -o pipefail
 # To verify the project with a custom command, do so with:
 # travis env set VERIFY_COMMAND "npm run our:verify" --public
 
-
 # Default User Environment Variables
-export DESIRED_NODE_VERSION
-if test -z "$DESIRED_NODE_VERSION"; then
+if test -z "${DESIRED_NODE_VERSION-}"; then
 	DESIRED_NODE_VERSION="$(nvm version-remote --lts)"
 else
 	DESIRED_NODE_VERSION="$(nvm version-remote "$DESIRED_NODE_VERSION")"
 fi
-export COMPILE_COMMAND
-if test -z "$COMPILE_COMMAND"; then
+if test -z "${COMPILE_COMMAND-}"; then
 	COMPILE_COMMAND="npm run our:compile"
 fi
-export VERIFY_COMMAND
-if test -z "$VERIFY_COMMAND"; then
+if test -z "${VERIFY_COMMAND-}"; then
 	VERIFY_COMMAND="npm run our:verify"
 fi
 
 # Set Local Environment Variables
-export CURRENT_NODE_VERSION; CURRENT_NODE_VERSION="$(node --version)"
+CURRENT_NODE_VERSION="$(node --version)"
 
 # Run
 if test "$CURRENT_NODE_VERSION" = "$DESIRED_NODE_VERSION"; then
