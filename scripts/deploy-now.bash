@@ -25,7 +25,7 @@ set -ueE -o pipefail
 #
 # NOW_TEAM
 # Your now team, if applicable. You can fetch your teams via the `now teams list` command.
-# travis env set NOW_TEAM "$NOW_TEAM"
+# travis env set NOW_TEAM "$NOW_TEAM" --public
 
 # EXTERNAL ENVIRONMENT VARIABLES
 #
