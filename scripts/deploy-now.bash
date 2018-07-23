@@ -41,11 +41,13 @@ fi
 # Run
 if test "${TRAVIS_BRANCH-}" = "$DEPLOY_BRANCH" -a -z "${TRAVIS_TAG-}" -a "$TRAVIS_PULL_REQUEST" = "false"; then
 	echo "deploying..."
-	if test -z "${NOW_TEAM-}"; then
-		now --token "$NOW_TOKEN" teams switch "$NOW_TEAM"
+	if test -n "${NOW_TEAM-}"; then
+		now --token "$NOW_TOKEN" --team "$NOW_TEAM"
+		now alias --token "$NOW_TOKEN" --team "$NOW_TEAM"
+	else
+		now --token "$NOW_TOKEN"
+		now alias --token "$NOW_TOKEN"
 	fi
-	now --token "$NOW_TOKEN"
-	now --token "$NOW_TOKEN" alias
 	echo "...deployed"
 else
 	echo "skipped deploy"
