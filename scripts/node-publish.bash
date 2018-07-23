@@ -6,7 +6,7 @@ set -ueE -o pipefail
 # TRAVIS SCRIPT
 #
 # after_success:
-#   - eval "$(curl -s https://raw.githubusercontent.com/bevry/awesome-travis/master/scripts/node-publish.bash)"
+#   - eval "$(curl -fsSL https://raw.githubusercontent.com/bevry/awesome-travis/master/scripts/node-publish.bash)"
 
 # TRAVIS ENVIRONMENT VARIABLES
 #
@@ -67,3 +67,7 @@ else
 	echo "running on node version $CURRENT_NODE_VERSION which IS NOT the desired $DESIRED_NODE_VERSION"
 	echo "skipping release to npm"
 fi
+
+# while our scripts pass linting, other scripts may not
+# /home/travis/.travis/job_stages: line 81: secure: unbound
+set +u

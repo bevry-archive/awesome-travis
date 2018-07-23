@@ -15,7 +15,7 @@ set -ueE -o pipefail
 # install:
 #   - gem install travis --no-rdoc --no-ri
 # script:
-#   - eval "$(curl -s https://raw.githubusercontent.com/bevry/awesome-travis/master/scripts/travis-another.bash)"
+#   - eval "$(curl -fsSL https://raw.githubusercontent.com/bevry/awesome-travis/master/scripts/travis-another.bash)"
 
 # TRAVIS ENVIRONMENT VARIABLES
 #
@@ -51,3 +51,7 @@ if test "${TRAVIS_BRANCH-}" = "${TRAVIS_ANOTHER_BRANCH}"; then
 else
 	echo "skipped ping $TRAVIS_ANOTHER_SLUG"
 fi
+
+# while our scripts pass linting, other scripts may not
+# /home/travis/.travis/job_stages: line 81: secure: unbound
+set +u

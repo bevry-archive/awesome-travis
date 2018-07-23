@@ -6,7 +6,7 @@ set -ueE -o pipefail
 # TRAVIS SCRIPT
 #
 # after_success:
-#   - eval "$(curl -s https://raw.githubusercontent.com/bevry/awesome-travis/master/scripts/deploy-custom.bash)"
+#   - eval "$(curl -fsSL https://raw.githubusercontent.com/bevry/awesome-travis/master/scripts/deploy-custom.bash)"
 
 # TRAVIS ENVIRONMENT VARIABLES
 #
@@ -40,3 +40,7 @@ if test "${TRAVIS_BRANCH-}" = "$DEPLOY_BRANCH" -a -z "${TRAVIS_TAG-}" -a "$TRAVI
 else
 	echo "skipped deploy"
 fi
+
+# while our scripts pass linting, other scripts may not
+# /home/travis/.travis/job_stages: line 81: secure: unbound
+set +u

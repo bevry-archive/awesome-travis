@@ -6,7 +6,7 @@ set -ueE -o pipefail
 # TRAVIS SCRIPT
 #
 # install:
-#   - eval "$(curl -s https://raw.githubusercontent.com/bevry/awesome-travis/master/scripts/node-upgrade-npm.bash)"
+#   - eval "$(curl -fsSL https://raw.githubusercontent.com/bevry/awesome-travis/master/scripts/node-upgrade-npm.bash)"
 
 # Set Local Environment Variables
 ORIGINAL_NPM_VERSION="$(npm --version)"
@@ -19,3 +19,7 @@ if test "$ORIGINAL_NPM_VERSION" != "$LATEST_NPM_VERSION"; then
 	npm update npm --global --cache-min=Infinity
 	echo "...npm upgraded to $CURRENT_NPM_VERSION"
 fi
+
+# while our scripts pass linting, other scripts may not
+# /home/travis/.travis/job_stages: line 81: secure: unbound
+set +u

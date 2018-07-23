@@ -8,7 +8,7 @@ set -ueE -o pipefail
 # TRAVIS SCRIPT
 #
 # before_script:
-#   - eval "$(curl -s https://raw.githubusercontent.com/bevry/awesome-travis/master/scripts/node-verify.bash)"
+#   - eval "$(curl -fsSL https://raw.githubusercontent.com/bevry/awesome-travis/master/scripts/node-verify.bash)"
 
 # TRAVIS ENVIRONMENT VARIABLES
 #
@@ -62,3 +62,7 @@ else
 	nvm use "$CURRENT_NODE_VERSION"
 	echo "...swapped back to $CURRENT_NODE_VERSION"
 fi
+
+# while our scripts pass linting, other scripts may not
+# /home/travis/.travis/job_stages: line 81: secure: unbound
+set +u
