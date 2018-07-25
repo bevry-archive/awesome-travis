@@ -16,7 +16,7 @@ set -ueE -o pipefail
 #
 # DEPLOY_COMMAND
 # The command that will do the compilation and git push:
-# travis env set DEPLOY_COMMAND "npm run deploy" --public
+# travis env set DEPLOY_COMMAND "npm run our:deploy" --public
 
 # EXTERNAL ENVIRONMENT VARIABLES
 #
