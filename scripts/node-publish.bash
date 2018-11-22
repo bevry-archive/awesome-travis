@@ -32,9 +32,9 @@ set -ueE -o pipefail
 
 # Default User Environment Variables
 if test -z "${DESIRED_NODE_VERSION-}"; then
-	DESIRED_NODE_VERSION="$(nvm version-remote --lts)"
+	DESIRED_NODE_VERSION="$(set +u && nvm version-remote --lts && set -u)"
 else
-	DESIRED_NODE_VERSION="$(nvm version-remote "$DESIRED_NODE_VERSION")"
+	DESIRED_NODE_VERSION="$(set +u && nvm version-remote "$DESIRED_NODE_VERSION" && set -u)"
 fi
 
 # Set Local Environment Variables

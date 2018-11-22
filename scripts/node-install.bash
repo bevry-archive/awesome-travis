@@ -20,9 +20,9 @@ set -ueE -o pipefail
 
 # Default User Environment Variables
 if test -z "${DESIRED_NODE_VERSION-}"; then
-	DESIRED_NODE_VERSION="$(nvm version-remote --lts)"
+	DESIRED_NODE_VERSION="$(set +u && nvm version-remote --lts && set -u)"
 else
-	DESIRED_NODE_VERSION="$(nvm version-remote "$DESIRED_NODE_VERSION")"
+	DESIRED_NODE_VERSION="$(set +u && nvm version-remote "$DESIRED_NODE_VERSION" && set -u)"
 fi
 if test -z "${SETUP_COMMAND-}"; then
 	SETUP_COMMAND="npm run our:setup"
@@ -42,7 +42,7 @@ else
 	echo "running on node version $CURRENT_NODE_VERSION which IS NOT the desired $DESIRED_NODE_VERSION"
 
 	echo "installing the desired version..."
-	nvm install "$DESIRED_NODE_VERSION"
+	set +u && nvm install "$DESIRED_NODE_VERSION" && set -u
 	echo "...installed the desired $DESIRED_NODE_VERSION"
 
 	echo "completing setup with $DESIRED_NODE_VERSION..."
@@ -50,7 +50,7 @@ else
 	echo "...setup complete with $DESIRED_NODE_VERSION"
 
 	echo "switching back to $CURRENT_NODE_VERSION"
-	nvm use "$CURRENT_NODE_VERSION"
+	set +u && nvm use "$CURRENT_NODE_VERSION" && set -u
 	echo "...switched back to $CURRENT_NODE_VERSION"
 fi
 
