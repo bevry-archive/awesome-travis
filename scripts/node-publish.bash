@@ -29,6 +29,10 @@ set -ueE -o pipefail
 # NPM_EMAIL
 # Specify your npm email
 # travis env set NPM_EMAIL "$NPM_EMAIL"
+#
+# NPM_VERSION_BUMP
+# Specify whether or not to bump the npm version
+# travis env set NPM_VERSION_BUMP "patch"
 
 # Default User Environment Variables
 if test -z "${DESIRED_NODE_VERSION-}"; then
@@ -56,6 +60,12 @@ if test "$CURRENT_NODE_VERSION" = "$DESIRED_NODE_VERSION"; then
 		else
 			echo "your must provide NPM_AUTHTOKEN or a (NPM_USERNAME, NPM_PASSWORD, NPM_EMAIL) combination"
 			exit -1
+		fi
+		if test -n "${NPM_VERSION_BUMP-}"; then
+			echo "fetching the latest npm version..."
+			npm version "$(npm view . version)" --allow-same-version --no-git-tag-version
+			echo "bumping the npm version..."
+			npm version "${NPM_VERSION_BUMP}"
 		fi
 		echo "publishing..."
 		npm publish --access public
