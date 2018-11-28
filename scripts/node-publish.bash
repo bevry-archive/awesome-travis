@@ -33,10 +33,6 @@ set -ueE -o pipefail
 # NPM_VERSION_BUMP
 # Specify whether or not to bump the npm version
 # travis env set NPM_VERSION_BUMP "patch"
-#
-# NPM_PUBLISH_ONLY_TAGS
-# If set to false, then it will publish on all passing builds, otherwise only passing tags will be published
-# travis env set NPM_PUBLISH_ONLY_TAGS "false"
 
 # EXTERNAL ENVIRONMENT VARIABLES
 #
@@ -57,7 +53,7 @@ CURRENT_NODE_VERSION="$(node --version)"
 if test "$TRAVIS_PULL_REQUEST" = "false";
 	if "$CURRENT_NODE_VERSION" = "$DESIRED_NODE_VERSION"; then
 		echo "running on node version $CURRENT_NODE_VERSION which IS the desired $DESIRED_NODE_VERSION"
-		if test "$NPM_PUBLISH_ONLY_TAGS" = "false" -o "${TRAVIS_TAG-}"; then
+		if test -n "${NPM_VERSION_BUMP-}" -o -n "${TRAVIS_TAG-}"; then
 			echo "releasing to npm..."
 			if test -n "${NPM_AUTHTOKEN-}"; then
 				echo "creating npmrc with auth token..."
@@ -71,7 +67,8 @@ if test "$TRAVIS_PULL_REQUEST" = "false";
 				echo "your must provide NPM_AUTHTOKEN or a (NPM_USERNAME, NPM_PASSWORD, NPM_EMAIL) combination"
 				exit -1
 			fi
-			if test -n "${NPM_VERSION_BUMP-}"; then
+			if test -z "${TRAVIS_TAG-}" -a -n "${NPM_VERSION_BUMP-}"; then
+				echo "non tag release, so bumping version from the latest..."
 				echo "fetching the latest npm version..."
 				npm version "$(npm view . version)" --allow-same-version --no-git-tag-version
 				echo "bumping the npm version..."
@@ -81,7 +78,7 @@ if test "$TRAVIS_PULL_REQUEST" = "false";
 			npm publish --access public
 			echo "...released to npm"
 		else
-			echo "non-tag, no need for release"
+			echo "no need for release"
 		fi
 	else
 		echo "running on node version $CURRENT_NODE_VERSION which IS NOT the desired $DESIRED_NODE_VERSION"
