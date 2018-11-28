@@ -50,7 +50,7 @@ fi
 CURRENT_NODE_VERSION="$(node --version)"
 
 # Run
-if test "$TRAVIS_PULL_REQUEST" = "false";
+if test "$TRAVIS_PULL_REQUEST" = "false"; then
 	if "$CURRENT_NODE_VERSION" = "$DESIRED_NODE_VERSION"; then
 		echo "running on node version $CURRENT_NODE_VERSION which IS the desired $DESIRED_NODE_VERSION"
 		if test -n "${NPM_VERSION_BUMP-}" -o -n "${TRAVIS_TAG-}"; then
