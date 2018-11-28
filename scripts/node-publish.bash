@@ -33,6 +33,15 @@ set -ueE -o pipefail
 # NPM_VERSION_BUMP
 # Specify whether or not to bump the npm version
 # travis env set NPM_VERSION_BUMP "patch"
+#
+# NPM_PUBLISH_ONLY_TAGS
+# If set to false, then it will publish on all passing builds, otherwise only passing tags will be published
+# travis env set NPM_PUBLISH_ONLY_TAGS "false"
+
+# EXTERNAL ENVIRONMENT VARIABLES
+#
+# TRAVIS_TAG
+# TRAVIS_PULL_REQUEST
 
 # Default User Environment Variables
 if test -z "${DESIRED_NODE_VERSION-}"; then
@@ -45,36 +54,41 @@ fi
 CURRENT_NODE_VERSION="$(node --version)"
 
 # Run
-if test "$CURRENT_NODE_VERSION" = "$DESIRED_NODE_VERSION"; then
-	echo "running on node version $CURRENT_NODE_VERSION which IS the desired $DESIRED_NODE_VERSION"
-	if test "${TRAVIS_TAG-}"; then
-		echo "releasing to npm..."
-		if test -n "${NPM_AUTHTOKEN-}"; then
-			echo "creating npmrc with auth token..."
-			echo "//registry.npmjs.org/:_authToken=$NPM_AUTHTOKEN" > "$HOME/.npmrc"
-		elif test -n "${NPM_USERNAME-}" -a -n "${NPM_PASSWORD-}"; then
-			echo "installing automated npm login command..."
-			npm install -g npm-login-cmd
-			echo "logging in..."
-			env NPM_USER="$NPM_USERNAME" NPM_PASS="$NPM_PASSWORD" npm-login-cmd
+if test "$TRAVIS_PULL_REQUEST" = "false";
+	if "$CURRENT_NODE_VERSION" = "$DESIRED_NODE_VERSION"; then
+		echo "running on node version $CURRENT_NODE_VERSION which IS the desired $DESIRED_NODE_VERSION"
+		if test "$NPM_PUBLISH_ONLY_TAGS" = "false" -o "${TRAVIS_TAG-}"; then
+			echo "releasing to npm..."
+			if test -n "${NPM_AUTHTOKEN-}"; then
+				echo "creating npmrc with auth token..."
+				echo "//registry.npmjs.org/:_authToken=$NPM_AUTHTOKEN" > "$HOME/.npmrc"
+			elif test -n "${NPM_USERNAME-}" -a -n "${NPM_PASSWORD-}"; then
+				echo "installing automated npm login command..."
+				npm install -g npm-login-cmd
+				echo "logging in..."
+				env NPM_USER="$NPM_USERNAME" NPM_PASS="$NPM_PASSWORD" npm-login-cmd
+			else
+				echo "your must provide NPM_AUTHTOKEN or a (NPM_USERNAME, NPM_PASSWORD, NPM_EMAIL) combination"
+				exit -1
+			fi
+			if test -n "${NPM_VERSION_BUMP-}"; then
+				echo "fetching the latest npm version..."
+				npm version "$(npm view . version)" --allow-same-version --no-git-tag-version
+				echo "bumping the npm version..."
+				npm version "${NPM_VERSION_BUMP}"
+			fi
+			echo "publishing..."
+			npm publish --access public
+			echo "...released to npm"
 		else
-			echo "your must provide NPM_AUTHTOKEN or a (NPM_USERNAME, NPM_PASSWORD, NPM_EMAIL) combination"
-			exit -1
+			echo "non-tag, no need for release"
 		fi
-		if test -n "${NPM_VERSION_BUMP-}"; then
-			echo "fetching the latest npm version..."
-			npm version "$(npm view . version)" --allow-same-version --no-git-tag-version
-			echo "bumping the npm version..."
-			npm version "${NPM_VERSION_BUMP}"
-		fi
-		echo "publishing..."
-		npm publish --access public
-		echo "...released to npm"
 	else
-		echo "non-tag, no need for release"
+		echo "running on node version $CURRENT_NODE_VERSION which IS NOT the desired $DESIRED_NODE_VERSION"
+		echo "skipping release to npm"
 	fi
 else
-	echo "running on node version $CURRENT_NODE_VERSION which IS NOT the desired $DESIRED_NODE_VERSION"
+	echo "running on pull request"
 	echo "skipping release to npm"
 fi
 
