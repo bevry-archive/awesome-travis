@@ -72,7 +72,7 @@ if test "$TRAVIS_PULL_REQUEST" = "false"; then
 				echo "fetching the latest npm version..."
 				npm version "$(npm view . version)" --allow-same-version --no-git-tag-version
 				echo "bumping the npm version..."
-				npm version "${NPM_VERSION_BUMP}"
+				npm version "${NPM_VERSION_BUMP}" --no-git-tag-version
 			fi
 			echo "publishing..."
 			npm publish --access public
