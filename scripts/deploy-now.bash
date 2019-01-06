@@ -40,6 +40,13 @@ fi
 
 # Run
 if test "${TRAVIS_BRANCH-}" = "$DEPLOY_BRANCH" -a -z "${TRAVIS_TAG-}" -a "$TRAVIS_PULL_REQUEST" = "false"; then
+	if type "now" &> /dev/null; then
+		echo "now is already installed"
+	else
+		echo "installing now..."
+		npm i -g now
+		echo "...installed now"
+	fi
 	echo "deploying..."
 	if test -n "${NOW_TEAM-}"; then
 		now --token "$NOW_TOKEN" --team "$NOW_TEAM"
