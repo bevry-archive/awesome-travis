@@ -40,7 +40,7 @@ fi
 
 # Run
 if test "${TRAVIS_BRANCH-}" = "$DEPLOY_BRANCH" -a -z "${TRAVIS_TAG-}" -a "$TRAVIS_PULL_REQUEST" = "false"; then
-	if type "now" &> /dev/null; then
+	if type now &> /dev/null; then
 		echo "now is already installed"
 	else
 		echo "installing now..."
