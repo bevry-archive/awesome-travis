@@ -87,14 +87,12 @@ Trigger another travis projects tests after completion of the current travis pro
 When following the installation instructions for a script, you probably want to change `master` [to the the current commit hash](https://help.github.com/en/articles/getting-permanent-links-to-files#press-kbdykbd-to-permalink-to-a-file-in-a-specific-commit), for instance changing:
 
 ``` yaml
-install:
   - eval "$(curl -fsSL https://raw.githubusercontent.com/bevry/awesome-travis/master/scripts/node-install.bash)"
 ```
 
 To:
 
 ``` yaml
-install:
   - eval "$(curl -fsSL https://raw.githubusercontent.com/bevry/awesome-travis/2d86ca6ebe8730048750eeeb3845e8857dc89aa0/scripts/node-install.bash)"
 ```
 
