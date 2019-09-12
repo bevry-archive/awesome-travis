@@ -55,24 +55,32 @@ cache:
 
 We provide many premade scripts to accelerate your Travis CI usage. They are available within the [`scripts` directory](https://github.com/bevry/awesome-travis/tree/master/scripts) directory of this repository. Click on each script to see available configuration, and installation instructions.
 
-- [`deploy-custom`](https://github.com/bevry/awesome-travis/blob/master/scripts/deploy-custom.bash)
-  If the tests succeed on the specified `DEPLOY_BRANCH`, then prepare git for deployment, and then run the `DEPLOY_COMMAND`.
-- [`deploy-git`](https://github.com/bevry/awesome-travis/blob/master/scripts/deploy-git.bash)
-  If the tests succeed on the specified `DEPLOY_BRANCH`, then prepare git for deployment, and then run the `DEPLOY_COMMAND`.
-- [`deploy-now`](https://github.com/bevry/awesome-travis/blob/master/scripts/deploy-now.bash)
-  If the tests succeed on the specified `DEPLOY_BRANCH`, then deploy with https://zeit.co/now
-- [`node-install`](https://github.com/bevry/awesome-travis/blob/master/scripts/node-install.bash)
-  Use the `DESIRED_NODE_VERSION` (defaults to the latest LTS node version) to install dependencies using `SETUP_COMMAND` (defaults to `npm install`).
-- [`node-publish`](https://github.com/bevry/awesome-travis/blob/master/scripts/node-publish.bash)
-  Use the `DESIRED_NODE_VERSION` (defaults to the latest LTS node version) to login with npm and run `npm publish`.
-- [`node-upgrade-npm`](https://github.com/bevry/awesome-travis/blob/master/scripts/node-upgrade-npm.bash)
-  Ensure that the npm version is the latest.
-- [`node-verify`](https://github.com/bevry/awesome-travis/blob/master/scripts/node-verify.bash)
-  If our current node version is the `DESIRED_NODE_VERSION` (defaults to the latest LTS node version) then compile and lint our project with: `npm run our:compile && npm run our:verify` otherwise just compile our project with: `npm run our:compile`.
-- [`surge`](https://github.com/bevry/awesome-travis/blob/master/scripts/surge.bash)
-  If the tests succeeded, then deploy our release to [Surge](https://surge.sh) for our branch, tag, and commit.
-- [`travis-another`](https://github.com/bevry/awesome-travis/blob/master/scripts/travis-another.bash)
-  Trigger another travis projects tests after completion of the current travis project.
+#### [`deploy-custom`](https://github.com/bevry/awesome-travis/blob/master/scripts/deploy-custom.bash)
+If the tests succeed on the specified `DEPLOY_BRANCH`, then prepare git for deployment, and then run the `DEPLOY_COMMAND`.
+
+#### [`deploy-git`](https://github.com/bevry/awesome-travis/blob/master/scripts/deploy-git.bash)
+If the tests succeed on the specified `DEPLOY_BRANCH`, then prepare git for deployment, and then run the `DEPLOY_COMMAND`.
+
+#### [`deploy-now`](https://github.com/bevry/awesome-travis/blob/master/scripts/deploy-now.bash)
+If the tests succeed on the specified `DEPLOY_BRANCH`, then deploy with https://zeit.co/now
+
+#### [`node-install`](https://github.com/bevry/awesome-travis/blob/master/scripts/node-install.bash)
+Use the `DESIRED_NODE_VERSION` (defaults to the latest LTS node version) to install dependencies using `SETUP_COMMAND` (defaults to `npm install`).
+
+#### [`node-publish`](https://github.com/bevry/awesome-travis/blob/master/scripts/node-publish.bash)
+Use the `DESIRED_NODE_VERSION` (defaults to the latest LTS node version) to login with npm and run `npm publish`.
+
+#### [`node-upgrade-npm`](https://github.com/bevry/awesome-travis/blob/master/scripts/node-upgrade-npm.bash)
+Ensure that the npm version is the latest.
+
+#### [`node-verify`](https://github.com/bevry/awesome-travis/blob/master/scripts/node-verify.bash)
+If our current node version is the `DESIRED_NODE_VERSION` (defaults to the latest LTS node version) then compile and lint our project with: `npm run our:compile && npm run our:verify` otherwise just compile our project with: `npm run our:compile`.
+
+#### [`surge`](https://github.com/bevry/awesome-travis/blob/master/scripts/surge.bash)
+If the tests succeeded, then deploy our release to [Surge](https://surge.sh) for our branch, tag, and commit.
+
+#### [`travis-another`](https://github.com/bevry/awesome-travis/blob/master/scripts/travis-another.bash)
+Trigger another travis projects tests after completion of the current travis project.
 
 ### Installation
 
