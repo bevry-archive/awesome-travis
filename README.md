@@ -111,7 +111,7 @@ install:
 
 ## Generators
 
-- [`bevry/based`](https://github.com/bevry/based) generates your project, including your `.travis.yml` file, using this awesome list
+- [`boundation`](https://github.com/bevry/boundation) generates your project, including your `.travis.yml` file, using this awesome list
 
 
 ## Contribution
