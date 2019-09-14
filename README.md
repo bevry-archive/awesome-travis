@@ -124,7 +124,7 @@ When following the installation instructions for a script, you probably want to 
 To:
 
 ```yaml
-- eval "$(curl -fsSL https://raw.githubusercontent.com/bevry/awesome-travis/2d86ca6ebe8730048750eeeb3845e8857dc89aa0/scripts/node-install.bash)"
+- eval "$(curl -fsSL https://raw.githubusercontent.com/bevry/awesome-travis/19a67716252376729cff23f63818c1c797bc3b63/scripts/node-install.bash)"
 ```
 
 **Alternatively,** you could download the script to a new `.travis` folder inside your repository and use that instead:
