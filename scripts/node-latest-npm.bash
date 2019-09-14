@@ -1,12 +1,12 @@
 #!/bin/bash
 set -ueE -o pipefail
 
-# Ensure that the npm version is the latest.
+# Ensure that the npm version is the latest npm version released.
 
 # TRAVIS SCRIPT
 #
 # install:
-#   - eval "$(curl -fsSL https://raw.githubusercontent.com/bevry/awesome-travis/master/scripts/node-upgrade-npm.bash)"
+#   - eval "$(curl -fsSL https://raw.githubusercontent.com/bevry/awesome-travis/master/scripts/node-latest-npm.bash)"
 
 # Set Local Environment Variables
 ORIGINAL_NPM_VERSION="$(npm --version)"
