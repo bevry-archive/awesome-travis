@@ -3,12 +3,12 @@ set -ueE -o pipefail
 
 # Use the `DESIRED_NODE_VERSION` (defaults to the latest LTS node version) to login with npm and run `npm publish`.
 
-# TRAVIS SCRIPT
+# SCRIPT
 #
 # after_success:
 #   - eval "$(curl -fsSL https://raw.githubusercontent.com/bevry/awesome-travis/master/scripts/node-publish.bash)"
 
-# TRAVIS ENVIRONMENT VARIABLES
+# CUSTOM ENVIRONMENT VARIABLES
 #
 # DESIRED_NODE_VERSION
 # Specficy a specific node version (rather than the LTS version)
@@ -34,7 +34,7 @@ set -ueE -o pipefail
 # Specify whether or not to bump the npm version
 # travis env set NPM_VERSION_BUMP "patch"
 
-# EXTERNAL ENVIRONMENT VARIABLES
+# TRAVIS ENVIRONMENT VARIABLES
 #
 # TRAVIS_TAG
 # TRAVIS_PULL_REQUEST

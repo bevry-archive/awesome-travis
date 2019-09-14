@@ -29,17 +29,12 @@ sudo: false
 language: node_js
 os:
   - linux
-before_install:
-  - 'case "${TRAVIS_NODE_VERSION}" in 0.*) export NPM_CONFIG_STRICT_SSL=false ;; esac'
-  - 'nvm install-latest-npm'
-install:
-  - 'if [ "${TRAVIS_NODE_VERSION}" = "0.6" ] || [ "${TRAVIS_NODE_VERSION}" = "0.9" ]; then nvm install --latest-npm 0.8 && npm install && nvm use "${TRAVIS_NODE_VERSION}"; else npm install; fi;'
 node_js:
-  - '11' # current
+  - '12' # current release
   - '10' # active lts
-  - '8' # active lts
-  - '6' # active lts
-  - '4' # end of life lts
+  - '8' # maintenance lts
+  - '6' # end of life
+  - '4' # end of life
   - '0.12' # end of life
   - '0.10' # end of life
   - '0.8' # end of life
@@ -47,6 +42,8 @@ node_js:
 matrix:
   fast_finish: true
   allow_failures:
+    - node_js: '6'
+    - node_js: '4'
     - node_js: '0.12'
     - node_js: '0.10'
     - node_js: '0.8'
@@ -61,6 +58,8 @@ cache:
 ## Scripts
 
 We provide many premade scripts to accelerate your Travis CI usage. They are available within the [`scripts` directory](https://github.com/bevry/awesome-travis/tree/master/scripts) directory of this repository. Click on each script to see available configuration, and installation instructions.
+
+### Listing
 
 #### [`deploy-custom`](https://github.com/bevry/awesome-travis/blob/master/scripts/deploy-custom.bash)
 
@@ -78,13 +77,29 @@ If the tests succeed on the specified `DEPLOY_BRANCH`, then deploy with https://
 
 Use the `DESIRED_NODE_VERSION` (defaults to the latest LTS node version) to install dependencies using `SETUP_COMMAND` (defaults to `npm install`).
 
+This is an alternative to the `node-npm-install` script.
+
+#### [`node-npm-install`](https://github.com/bevry/awesome-travis/blob/master/scripts/node-npm-install.bash)
+
+Because the latest npm version that node 0.6 and 0.9 support, doesn't support scoped modules, so it uses node 0.8 to install npm packages and then switches back.
+
+This is an alternative to the `node-install` script.
+
 #### [`node-publish`](https://github.com/bevry/awesome-travis/blob/master/scripts/node-publish.bash)
 
 Use the `DESIRED_NODE_VERSION` (defaults to the latest LTS node version) to login with npm and run `npm publish`.
 
+#### [`node-upgrade-npm`](https://github.com/bevry/awesome-travis/blob/master/scripts/node-upgrade-npm.bash)
+
+Installs the latest supported version of npm for the current node version, using nvm's `install-latest-npm` command.
+
+This is an alternative to the `node-latest-npm` script.
+
 #### [`node-latest-npm`](https://github.com/bevry/awesome-travis/blob/master/scripts/node-latest-npm.bash)
 
-Ensure that the npm version is the latest npm version released.
+Installs the latest npm version, using npm's `update` command.
+
+This is an alternative to the `node-upgrade-npm` script.
 
 #### [`node-verify`](https://github.com/bevry/awesome-travis/blob/master/scripts/node-verify.bash)
 

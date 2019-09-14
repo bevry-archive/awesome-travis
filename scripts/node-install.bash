@@ -3,12 +3,12 @@ set -ueE -o pipefail
 
 # Use the `DESIRED_NODE_VERSION` (defaults to the latest LTS node version) to install dependencies using `SETUP_COMMAND` (defaults to `npm install`).
 
-# TRAVIS SCRIPT
+# SCRIPT
 #
 # install:
 #   - eval "$(curl -fsSL https://raw.githubusercontent.com/bevry/awesome-travis/master/scripts/node-install.bash)"
 
-# TRAVIS ENVIRONMENT VARIABLES
+# CUSTOM ENVIRONMENT VARIABLES
 #
 # DESIRED_NODE_VERSION
 # To specify a specific node version (rather tha the LTS version):

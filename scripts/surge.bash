@@ -8,7 +8,7 @@ set -ueE -o pipefail
 # causing a documentation recompile to always leave a dirty state - this solution avoids that,
 # as documentation can be git ignored.
 
-# TRAVIS SCRIPT
+# SCRIPT
 #
 # after_success:
 #   - eval "$(curl -fsSL https://raw.githubusercontent.com/bevry/awesome-travis/master/scripts/surge.bash)"
@@ -19,7 +19,7 @@ set -ueE -o pipefail
 # You will need to make sure you have surge installed as a local dependency,
 # using npm: npm install --save-dev surge
 
-# TRAVIS ENVIRONMENT VARIABLES
+# CUSTOM ENVIRONMENT VARIABLES
 #
 # DESIRED_NODE_VERSION
 # Specficy a specific node version (rather than the LTS version)
@@ -37,7 +37,7 @@ set -ueE -o pipefail
 # Set the path that you want to deploy to surge
 # travis env set SURGE_PROJECT "." --public
 
-# External Environment Variables
+# TRAVIS ENVIRONMENT VARIABLES
 #
 # TRAVIS_REPO_SLUG
 # TRAVIS_BRANCH

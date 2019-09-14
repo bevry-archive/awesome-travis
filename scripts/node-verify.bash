@@ -5,12 +5,12 @@ set -ueE -o pipefail
 # then compile and lint our project with: `npm run our:compile && npm run our:verify`
 # otherwise just compile our project with: `npm run our:compile`
 
-# TRAVIS SCRIPT
+# SCRIPT
 #
 # before_script:
 #   - eval "$(curl -fsSL https://raw.githubusercontent.com/bevry/awesome-travis/master/scripts/node-verify.bash)"
 
-# TRAVIS ENVIRONMENT VARIABLES
+# CUSTOM ENVIRONMENT VARIABLES
 #
 # DESIRED_NODE_VERSION
 # To specify a specific node version (rather than the LTS version)

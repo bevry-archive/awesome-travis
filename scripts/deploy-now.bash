@@ -3,7 +3,7 @@ set -ueE -o pipefail
 
 # If the tests succeed on the specified `DEPLOY_BRANCH`, then deploy with https://zeit.co/now
 
-# TRAVIS SCRIPT
+# SCRIPT
 #
 # after_success:
 #   - eval "$(curl -fsSL https://raw.githubusercontent.com/bevry/awesome-travis/master/scripts/deploy-now.bash)"
@@ -13,7 +13,7 @@ set -ueE -o pipefail
 # You will need to make sure you have now installed as a local dependency,
 # using npm: npm install --save-dev now
 
-# TRAVIS ENVIRONMENT VARIABLES
+# CUSTOM ENVIRONMENT VARIABLES
 #
 # DEPLOY_BRANCH
 # The branch name that you want tested and deployed (defaults to `master`)
@@ -27,7 +27,7 @@ set -ueE -o pipefail
 # Your now team, if applicable. You can fetch your teams via the `now teams list` command.
 # travis env set NOW_TEAM "$NOW_TEAM" --public
 
-# EXTERNAL ENVIRONMENT VARIABLES
+# TRAVIS ENVIRONMENT VARIABLES
 #
 # TRAVIS_BRANCH
 # TRAVIS_TAG

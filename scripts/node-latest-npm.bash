@@ -1,9 +1,9 @@
 #!/bin/bash
 set -ueE -o pipefail
 
-# Ensure that the npm version is the latest npm version released.
+# Installs the latest npm version, using npm's `update` command.
 
-# TRAVIS SCRIPT
+# SCRIPT
 #
 # install:
 #   - eval "$(curl -fsSL https://raw.githubusercontent.com/bevry/awesome-travis/master/scripts/node-latest-npm.bash)"

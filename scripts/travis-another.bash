@@ -6,7 +6,7 @@ set -ueE -o pipefail
 # and as such, when the content repository changes, you want to rerun the tests for the other repository,
 # perhaps even for deployment purposes.
 
-# TRAVIS SCRIPT
+# SCRIPT
 #
 # sudo: false
 # language: ruby
@@ -17,7 +17,7 @@ set -ueE -o pipefail
 # script:
 #   - eval "$(curl -fsSL https://raw.githubusercontent.com/bevry/awesome-travis/master/scripts/travis-another.bash)"
 
-# TRAVIS ENVIRONMENT VARIABLES
+# CUSTOM ENVIRONMENT VARIABLES
 #
 # GITHUB_TRAVIS_TOKEN
 # Specify your [GitHub Personal Access Token](https://help.github.com/articles/creating-an-access-token-for-command-line-use/) with the `repo` permission.
@@ -29,7 +29,7 @@ set -ueE -o pipefail
 #
 # TRAVIS_ANOTHER_BRANCH
 # The branch we should run this script on
-#
+
 # Run
 if test "${TRAVIS_BRANCH-}" = "${TRAVIS_ANOTHER_BRANCH}"; then
 	echo "pinging $TRAVIS_ANOTHER_SLUG..."

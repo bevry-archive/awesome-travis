@@ -3,12 +3,12 @@ set -ueE -o pipefail
 
 # If the tests succeed on the specified `DEPLOY_BRANCH`, then prepare git for deployment, and then run the `DEPLOY_COMMAND`.
 
-# TRAVIS SCRIPT
+# SCRIPT
 #
 # after_success:
 #   - eval "$(curl -fsSL https://raw.githubusercontent.com/bevry/awesome-travis/master/scripts/deploy-custom.bash)"
 
-# TRAVIS ENVIRONMENT VARIABLES
+# CUSTOM ENVIRONMENT VARIABLES
 #
 # DEPLOY_BRANCH
 # The branch name that you want tested and deployed, set correctly:
@@ -18,7 +18,7 @@ set -ueE -o pipefail
 # The command that will do the compilation and git push:
 # travis env set DEPLOY_COMMAND "npm run our:deploy" --public
 
-# EXTERNAL ENVIRONMENT VARIABLES
+# TRAVIS ENVIRONMENT VARIABLES
 #
 # TRAVIS_BRANCH
 # TRAVIS_TAG
