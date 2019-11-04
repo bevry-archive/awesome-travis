@@ -33,9 +33,14 @@ set -ueE -o pipefail
 # NPM_VERSION_BUMP
 # Specify whether or not to bump the npm version
 # travis env set NPM_VERSION_BUMP "patch"
+#
+# NPM_BRANCH_TAG
+# Specify which branch should be published to npm as which tag
+# travis env set NPM_BRANCH_TAG "master:next"
 
 # TRAVIS ENVIRONMENT VARIABLES
 #
+# TRAVIS_BRANCH
 # TRAVIS_TAG
 # TRAVIS_PULL_REQUEST
 
@@ -53,7 +58,16 @@ CURRENT_NODE_VERSION="$(node --version)"
 if test "$TRAVIS_PULL_REQUEST" = "false"; then
 	if test "$CURRENT_NODE_VERSION" = "$DESIRED_NODE_VERSION"; then
 		echo "running on node version $CURRENT_NODE_VERSION which IS the desired $DESIRED_NODE_VERSION"
-		if test -n "${NPM_VERSION_BUMP-}" -o -n "${TRAVIS_TAG-}"; then
+		
+		# trim everything after the colon
+		if test -n "${NPM_BRANCH_TAG:-}"; then
+			branch="${NPM_BRANCH_TAG%:*}"
+			if test "$branch" = "$TRAVIS_BRANCH"; then
+				tag="${NPM_BRANCH_TAG#*:}"
+			fi
+		fi
+
+		if test -n "${NPM_VERSION_BUMP-}" -o -n "${TRAVIS_TAG-}" -o -n "${tag-}"; then
 			echo "releasing to npm..."
 			if test -n "${NPM_AUTHTOKEN-}"; then
 				echo "creating npmrc with auth token..."
@@ -74,8 +88,13 @@ if test "$TRAVIS_PULL_REQUEST" = "false"; then
 				echo "bumping the npm version..."
 				npm version "${NPM_VERSION_BUMP}" --no-git-tag-version
 			fi
-			echo "publishing..."
-			npm publish --access public
+			if test -n "${tag-}"; then
+				echo "publishing ${branch} to tag ${tag}..."
+				npm publish --access public --tag "${tag}"
+			else
+				echo "publishing..."
+				npm publish --access public
+			fi
 			echo "...released to npm"
 		else
 			echo "no need for release"
