@@ -59,7 +59,7 @@ if test "$TRAVIS_PULL_REQUEST" = "false"; then
 	if test "$CURRENT_NODE_VERSION" = "$DESIRED_NODE_VERSION"; then
 		echo "running on node version $CURRENT_NODE_VERSION which IS the desired $DESIRED_NODE_VERSION"
 		
-		# trim everything after the colon
+		# check if we wish to tag the current branch
 		if test -n "${NPM_BRANCH_TAG:-}"; then
 			branch="${NPM_BRANCH_TAG%:*}"
 			if test "$branch" = "$TRAVIS_BRANCH"; then
@@ -69,6 +69,8 @@ if test "$TRAVIS_PULL_REQUEST" = "false"; then
 
 		if test -n "${NPM_VERSION_BUMP-}" -o -n "${TRAVIS_TAG-}" -o -n "${tag-}"; then
 			echo "releasing to npm..."
+			
+			# login
 			if test -n "${NPM_AUTHTOKEN-}"; then
 				echo "creating npmrc with auth token..."
 				echo "//registry.npmjs.org/:_authToken=$NPM_AUTHTOKEN" > "$HOME/.npmrc"
@@ -81,20 +83,29 @@ if test "$TRAVIS_PULL_REQUEST" = "false"; then
 				echo "your must provide NPM_AUTHTOKEN or a (NPM_USERNAME, NPM_PASSWORD, NPM_EMAIL) combination"
 				exit -1
 			fi
+			
+			# publish bump
 			if test -z "${TRAVIS_TAG-}" -a -n "${NPM_VERSION_BUMP-}"; then
 				echo "non tag release, so bumping version from the latest..."
 				echo "fetching the latest npm version..."
 				npm version "$(npm view . version)" --allow-same-version --no-git-tag-version
 				echo "bumping the npm version..."
-				npm version "${NPM_VERSION_BUMP}" --no-git-tag-version
-			fi
-			if test -n "${tag-}"; then
-				echo "publishing ${branch} to tag ${tag}..."
+				version="$(npm version "${NPM_VERSION_BUMP}" --no-git-tag-version)"
+				echo "publishing the bumped version..."
+				npm publish --access public
+			
+			# publish branch tag
+			elif test -n "${tag-}"; then
+				version="$(npm version prerelease --preid="${tag}" --no-git-tag-version)"
+				echo "publishing the branched version ${version} to tag ${tag}..."
 				npm publish --access public --tag "${tag}"
+			
+			# publish package.json
 			else
-				echo "publishing..."
+				echo "publishing the local package.json version..."
 				npm publish --access public
 			fi
+			
 			echo "...released to npm"
 		else
 			echo "no need for release"
