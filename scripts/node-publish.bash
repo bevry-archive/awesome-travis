@@ -30,10 +30,6 @@ set -ueE -o pipefail
 # Specify your npm email
 # travis env set NPM_EMAIL "$NPM_EMAIL"
 #
-# NPM_VERSION_BUMP
-# Specify whether or not to bump the npm version
-# travis env set NPM_VERSION_BUMP "patch"
-#
 # NPM_BRANCH_TAG
 # Specify which branch should be published to npm as which tag
 # travis env set NPM_BRANCH_TAG "master:next"
@@ -84,20 +80,15 @@ if test "$TRAVIS_PULL_REQUEST" = "false"; then
 				exit -1
 			fi
 			
-			# publish bump
-			if test -z "${TRAVIS_TAG-}" -a -n "${NPM_VERSION_BUMP-}"; then
-				echo "non tag release, so bumping version from the latest..."
-				echo "fetching the latest npm version..."
-				npm version "$(npm view . version)" --allow-same-version --no-git-tag-version
+			# not travis tag, is branch tag
+			if test -z "${TRAVIS_TAG-}" -a -n "${tag-}"; then
 				echo "bumping the npm version..."
-				version="$(npm version "${NPM_VERSION_BUMP}" --no-git-tag-version)"
-				echo "publishing the bumped version..."
-				npm publish --access public
-			
-			# publish branch tag
-			elif test -n "${tag-}"; then
-				version="$(npm version prerelease --preid="${tag}" --no-git-tag-version)"
-				echo "publishing the branched version ${version} to tag ${tag}..."
+				version="$(node -e "console.log(require('./package.json').version)")"
+				commit="$(git rev-parse HEAD)"
+				time="$(date +%s)"
+				next="${version}-${tag}.${time}.${commit}"
+				echo "publishing branch ${branch} to tag ${tag} with version ${next}..."
+				npm version "${next}" --git-tag-version=false
 				npm publish --access public --tag "${tag}"
 			
 			# publish package.json
