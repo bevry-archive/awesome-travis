@@ -86,7 +86,7 @@ if test "$TRAVIS_PULL_REQUEST" = "false"; then
 				version="$(node -e "console.log(require('./package.json').version)")"
 				commit="$(git rev-parse HEAD)"
 				time="$(date +%s)"
-				next="${version}-${tag}.${time}.${commit}"
+				next="${version%-*}-${tag}.${time}.${commit}"  # version trims anything after -
 				npm version "${next}" --git-tag-version=false
 				echo "publishing branch ${branch} to tag ${tag} with version ${next}..."
 				npm publish --access public --tag "${tag}"
