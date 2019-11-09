@@ -67,9 +67,14 @@ if test "$CURRENT_NODE_VERSION" = "$DESIRED_NODE_VERSION"; then
 	echo "performing deploy..."
 	SURGE_SLUG="$(echo "$TRAVIS_REPO_SLUG" | sed 's/^\(.*\)\/\(.*\)/\2.\1/')"
 	if test -n "${TRAVIS_BRANCH-}"; then
-		target="$TRAVIS_BRANCH.$SURGE_SLUG.surge.sh"
-		echo "deploying branch of project $SURGE_PROJECT to $target"
-		surge --project "$SURGE_PROJECT" --domain "$target"
+		if [[ "$TRAVIS_BRANCH" = *"dependabot"* ]]; then
+			echo "running on dependanbot branch"
+			echo "skipping release to surge"
+		else
+			target="$TRAVIS_BRANCH.$SURGE_SLUG.surge.sh"
+			echo "deploying branch of project $SURGE_PROJECT to $target"
+			surge --project "$SURGE_PROJECT" --domain "$target"
+		fi
 	fi
 	if test -n "${TRAVIS_TAG-}"; then
 		target="$TRAVIS_TAG.$SURGE_SLUG.surge.sh"
