@@ -64,19 +64,22 @@ if test "$CURRENT_NODE_VERSION" = "$DESIRED_NODE_VERSION"; then
 	echo "performing release to surge..."
 	echo "preparing release"
 	npm run our:meta
-	echo "performing deploy"
+	echo "performing deploy..."
 	SURGE_SLUG="$(echo "$TRAVIS_REPO_SLUG" | sed 's/^\(.*\)\/\(.*\)/\2.\1/')"
 	if test -n "${TRAVIS_BRANCH-}"; then
-		echo "deploying branch..."
-		surge --project $SURGE_PROJECT --domain "$TRAVIS_BRANCH.$SURGE_SLUG.surge.sh"
+		target="$TRAVIS_BRANCH.$SURGE_SLUG.surge.sh"
+		echo "deploying branch of project $SURGE_PROJECT to $target"
+		surge --project "$SURGE_PROJECT" --domain "$target"
 	fi
 	if test -n "${TRAVIS_TAG-}"; then
-		echo "deploying tag..."
-		surge --project $SURGE_PROJECT --domain "$TRAVIS_TAG.$SURGE_SLUG.surge.sh"
+		target="$TRAVIS_TAG.$SURGE_SLUG.surge.sh"
+		echo "deploying tag of project $SURGE_PROJECT to $target"
+		surge --project $SURGE_PROJECT --domain "$target"
 	fi
 	if test "${TRAVIS_COMMIT-}"; then
-		echo "deploying commit..."
-		surge --project $SURGE_PROJECT --domain "$TRAVIS_COMMIT.$SURGE_SLUG.surge.sh"
+		target="$TRAVIS_COMMIT.$SURGE_SLUG.surge.sh"
+		echo "deploying commit of project $SURGE_PROJECT to $target"
+		surge --project $SURGE_PROJECT --domain "$target"
 	fi
 	echo "...released to surge"
 else
