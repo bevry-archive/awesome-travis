@@ -132,7 +132,7 @@ if test "$TRAVIS_PULL_REQUEST" = "false"; then
 
 			echo "adding cdn aliases..."
 			project="$(node -e "process.stdout.write(require('./package.json').name)")"
-			target="https://unpkg.com/${project}@${cdn}"
+			target="${project}@${cdn}"
 
 			if test -n "${TRAVIS_BRANCH-}"; then
 				if [[ "$TRAVIS_BRANCH" = *"dependabot"* ]]; then
