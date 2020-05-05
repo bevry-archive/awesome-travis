@@ -132,25 +132,26 @@ if test "$TRAVIS_PULL_REQUEST" = "false"; then
 			npm publish --access public --tag "${tag}"
 
 			echo "adding cdn aliases..."
-			project="${TRAVIS_REPO_SLUG#*/}" # use repo, rather than package name, as package name can have @bevry/name which isn't desirable for this use case
-			target="${project}@${cdn}"
+			packageName="$(node -e "process.stdout.write(require('./package.json').name)")"
+			repoName="${TRAVIS_REPO_SLUG#*/}"
+			target="${packageName}@${cdn}"
 
 			if test -n "${TRAVIS_BRANCH-}"; then
 				if [[ "$TRAVIS_BRANCH" = *"dependabot"* ]]; then
 					echo "running on dependanbot branch"
 					echo "skipping cdn branch alias"
 				else
-					echo "aliasing $project/$TRAVIS_BRANCH to ${target}"
-					curl -d "alias=$project/$TRAVIS_BRANCH" -d "target=${target}" -d "token=${BEVRY_CDN_TOKEN}" https://cdn.bevry.me
+					echo "aliasing $repoName/$TRAVIS_BRANCH to ${target}"
+					curl -d "alias=$repoName/$TRAVIS_BRANCH" -d "target=${target}" -d "token=${BEVRY_CDN_TOKEN}" https://cdn.bevry.me
 				fi
 			fi
 			if test -n "${TRAVIS_TAG-}"; then
-				echo "aliasing $project/$TRAVIS_TAG to ${target}"
-				curl -d "alias=$project/$TRAVIS_TAG" -d "target=${target}" -d "token=${BEVRY_CDN_TOKEN}" https://cdn.bevry.me
+				echo "aliasing $repoName/$TRAVIS_TAG to ${target}"
+				curl -d "alias=$repoName/$TRAVIS_TAG" -d "target=${target}" -d "token=${BEVRY_CDN_TOKEN}" https://cdn.bevry.me
 			fi
 			if test -n "${TRAVIS_COMMIT-}"; then
-				echo "aliasing $project/$TRAVIS_COMMIT to ${target}"
-				curl -d "alias=$project/$TRAVIS_COMMIT" -d "target=${target}" -d "token=${BEVRY_CDN_TOKEN}" https://cdn.bevry.me
+				echo "aliasing $repoName/$TRAVIS_COMMIT to ${target}"
+				curl -d "alias=$repoName/$TRAVIS_COMMIT" -d "target=${target}" -d "token=${BEVRY_CDN_TOKEN}" https://cdn.bevry.me
 			fi
 
 			echo 'resetting cdn changes...'
