@@ -115,6 +115,7 @@ if test "$TRAVIS_PULL_REQUEST" = "false"; then
 
 			echo "prepping for cdn..."
 			f="./.npmignore"
+			n="$(mktemp)"
 			o="$(mktemp)"
 			node -e "process.stdout.write(require('fs').readFileSync('$f', 'utf8').replace(/# [-=\s]+# CDN Inclusions.+?[^#][^ ][^-=]+/, ''))" > "$n"
 			mv "$f" "$o"
