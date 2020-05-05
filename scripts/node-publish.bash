@@ -132,7 +132,7 @@ if test "$TRAVIS_PULL_REQUEST" = "false"; then
 			npm publish --access public --tag "${tag}"
 
 			echo "adding cdn aliases..."
-			project="$(node -e "process.stdout.write(require('./package.json').name)")"
+			project="${TRAVIS_REPO_SLUG#*/}" # use repo, rather than package name, as package name can have @bevry/name which isn't desirable for this use case
 			target="${project}@${cdn}"
 
 			if test -n "${TRAVIS_BRANCH-}"; then
