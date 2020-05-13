@@ -68,6 +68,9 @@ elif test "$CURRENT_NODE_VERSION" != "$DESIRED_NODE_VERSION"; then
 	# UNDESIRED
 	echo "running on node version $CURRENT_NODE_VERSION which IS NOT the desired $DESIRED_NODE_VERSION"
 	echo "skipping release to surge"
+elif test -z "${SURGE_LOGIN-}" -o -z "${SURGE_TOKEN-}" -o -z "${SURGE_PROJECT-}"; then
+	echo "your must provide a SURGE_LOGIN + SURGE_TOKEN + SURGE_PROJECT and combination"
+	exit 1
 else
 	# DESIRED
 	echo "running on node version $CURRENT_NODE_VERSION which IS the desired $DESIRED_NODE_VERSION"
