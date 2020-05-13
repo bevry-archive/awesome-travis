@@ -43,6 +43,7 @@ set -ueE -o pipefail
 # TRAVIS_BRANCH
 # TRAVIS_TAG
 # TRAVIS_COMMIT
+# TRAVIS_PULL_REQUEST
 
 
 # Default User Environment Variables
@@ -59,7 +60,16 @@ fi
 CURRENT_NODE_VERSION="$(node --version)"
 
 # Run
-if test "$CURRENT_NODE_VERSION" = "$DESIRED_NODE_VERSION"; then
+if test "$TRAVIS_PULL_REQUEST" != "false"; then
+	# PULL REQUEST
+	echo "running on pull request"
+	echo "skipping release to surge"
+elif test "$CURRENT_NODE_VERSION" != "$DESIRED_NODE_VERSION"; then
+	# UNDESIRED
+	echo "running on node version $CURRENT_NODE_VERSION which IS NOT the desired $DESIRED_NODE_VERSION"
+	echo "skipping release to surge"
+else
+	# DESIRED
 	echo "running on node version $CURRENT_NODE_VERSION which IS the desired $DESIRED_NODE_VERSION"
 	echo "performing release to surge..."
 	echo "preparing release"
@@ -87,9 +97,6 @@ if test "$CURRENT_NODE_VERSION" = "$DESIRED_NODE_VERSION"; then
 		surge --project $SURGE_PROJECT --domain "$target"
 	fi
 	echo "...released to surge"
-else
-	echo "running on node version $CURRENT_NODE_VERSION which IS NOT the desired $DESIRED_NODE_VERSION"
-	echo "skipping release to surge"
 fi
 
 # while our scripts pass linting, other scripts may not
