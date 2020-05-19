@@ -91,6 +91,9 @@ else
 			echo "your must provide NPM_AUTHTOKEN or a (NPM_USERNAME, NPM_PASSWORD, NPM_EMAIL) combination"
 			exit 1
 		fi
+		
+		# verifying login
+		npm whoami
 
 		# not travis tag, is branch tag
 		if test -z "${TRAVIS_TAG-}" -a -n "${tag-}"; then
