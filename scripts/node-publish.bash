@@ -84,6 +84,11 @@ else
 		if test -n "${NPM_AUTHTOKEN-}"; then
 			echo "creating npmrc with auth token..."
 			echo "//registry.npmjs.org/:_authToken=$NPM_AUTHTOKEN" > "$HOME/.npmrc"
+			# verify
+			if ! npm whoami; then
+				echo "failed to login, outputting auth file for debugging: $HOME/.npmrc"
+				cat "$HOME/.npmrc"
+			fi
 		elif test -n "${NPM_USERNAME-}" -a -n "${NPM_PASSWORD-}"; then
 			echo "logging in..."
 			env NPM_USER="$NPM_USERNAME" NPM_PASS="$NPM_PASSWORD" npx npm-login-cmd
@@ -91,9 +96,6 @@ else
 			echo "your must provide NPM_AUTHTOKEN or a (NPM_USERNAME, NPM_PASSWORD, NPM_EMAIL) combination"
 			exit 1
 		fi
-		
-		# verifying login
-		npm whoami
 
 		# not travis tag, is branch tag
 		if test -z "${TRAVIS_TAG-}" -a -n "${tag-}"; then
