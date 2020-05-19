@@ -84,11 +84,6 @@ else
 		if test -n "${NPM_AUTHTOKEN-}"; then
 			echo "creating npmrc with auth token..."
 			echo "//registry.npmjs.org/:_authToken=$NPM_AUTHTOKEN" > "$HOME/.npmrc"
-			# verify
-			if ! npm whoami; then
-				echo "failed to login, outputting auth file for debugging: $HOME/.npmrc"
-				cat "$HOME/.npmrc"
-			fi
 		elif test -n "${NPM_USERNAME-}" -a -n "${NPM_PASSWORD-}"; then
 			echo "logging in..."
 			env NPM_USER="$NPM_USERNAME" NPM_PASS="$NPM_PASSWORD" npx npm-login-cmd
